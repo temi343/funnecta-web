@@ -17,8 +17,8 @@
     <div class="confirm-bg-c2"></div>
 
     <div class="confirm-card">
-      <!-- Success Icon -->
-      <div class="confirm-icon-wrap">
+      <!-- Success Icon (hidden until exchange succeeds) -->
+      <div class="confirm-icon-wrap" id="confirm-icon-wrap" style="display:none;">
         <div class="confirm-checkmark">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
@@ -30,49 +30,64 @@
         <span class="logo-text">Funnecta</span>
       </a>
 
-      <!-- Title -->
-      <h1 class="confirm-title">Email Verified!</h1>
-      <p class="confirm-welcome" id="display-welcome"></p>
-      <p class="confirm-message">
-        Your Funnecta account has been successfully verified.
-        Welcome to a world of real connections!
-      </p>
-
-      <!-- User Details Card -->
-      <div class="confirm-details">
-        <div class="confirm-row">
-          <span class="confirm-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Username
-          </span>
-          <span class="confirm-value" id="display-username">—</span>
-        </div>
-        <div class="confirm-divider"></div>
-        <div class="confirm-row">
-          <span class="confirm-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Email
-          </span>
-          <span class="confirm-value" id="display-email">—</span>
-        </div>
+      <!-- Loading State (shown while PKCE code is being exchanged) -->
+      <div id="confirm-loading" class="confirm-loading">
+        <div class="confirm-spinner"></div>
+        <p class="confirm-loading-text">Verifying your email&hellip;</p>
       </div>
 
-      <!-- CTA -->
-      <button id="open-app-btn" class="btn-primary btn-confirm" onclick="openApp()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Open App to Continue
-      </button>
-      <p class="confirm-app-fallback" id="app-fallback" style="display:none;">
-        App not installed?
-        <a href="App-apk%20file/app-release.apk" download>Download Funnecta</a>
-      </p>
+      <!-- Error State (shown if exchange fails or link is expired) -->
+      <div id="confirm-error" class="confirm-error-card" style="display:none;">
+        <p id="confirm-error-msg">This confirmation link has expired or is invalid.</p>
+        <p class="confirm-error-sub">Please try signing up again or <a href="mailto:support@funnecta.app">contact support</a>.</p>
+      </div>
 
-      <p class="confirm-footer-note">
-        If you didn't create this account, please <a href="mailto:support@funnecta.app">contact support</a>.
-      </p>
+      <!-- Success State (hidden until PKCE exchange completes successfully) -->
+      <div id="confirm-success" style="display:none;">
+        <h1 class="confirm-title">Email Verified!</h1>
+        <p class="confirm-welcome" id="display-welcome"></p>
+        <p class="confirm-message">
+          Your Funnecta account has been successfully verified.
+          Welcome to a world of real connections!
+        </p>
+
+        <!-- User Details Card -->
+        <div class="confirm-details">
+          <div class="confirm-row">
+            <span class="confirm-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Username
+            </span>
+            <span class="confirm-value" id="display-username">—</span>
+          </div>
+          <div class="confirm-divider"></div>
+          <div class="confirm-row">
+            <span class="confirm-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Email
+            </span>
+            <span class="confirm-value" id="display-email">—</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button id="open-app-btn" class="btn-primary btn-confirm" onclick="openApp()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Open App to Continue
+        </button>
+        <p class="confirm-app-fallback" id="app-fallback" style="display:none;">
+          App not installed?
+          <a href="App-apk%20file/app-release.apk" download>Download Funnecta</a>
+        </p>
+
+        <p class="confirm-footer-note">
+          If you didn't create this account, please <a href="mailto:support@funnecta.app">contact support</a>.
+        </p>
+      </div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

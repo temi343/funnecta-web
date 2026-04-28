@@ -97,31 +97,34 @@
   });
 
   /* ----------------------------------------------------------
-     CONFIRMATION PAGE: robust URL param extraction
-     Sources tried in order:
-       1. Query string  (?username=...&email=...)
-       2. Hash fragment (#username=...&email=...)
-       3. Supabase JWT  (access_token email claim)
+     CONFIRMATION PAGE: PKCE code exchange
+     supabase_flutter uses AuthFlowType.pkce, so Supabase
+     redirects here with ?code=PKCE_CODE instead of the old
+     implicit #access_token=... hash. The code MUST be
+     exchanged with Supabase to mark the user as confirmed.
   ---------------------------------------------------------- */
   const usernameEl  = document.getElementById('display-username');
   const emailEl     = document.getElementById('display-email');
   const welcomeEl   = document.getElementById('display-welcome');
 
   if (usernameEl && emailEl) {
+    const loadingEl  = document.getElementById('confirm-loading');
+    const errorEl    = document.getElementById('confirm-error');
+    const errorMsgEl = document.getElementById('confirm-error-msg');
+    const successEl  = document.getElementById('confirm-success');
+    const iconWrapEl = document.getElementById('confirm-icon-wrap');
 
-    // Sanitise: strip HTML to prevent XSS
     function sanitise(str) {
       if (!str) return null;
       var tmp = document.createElement('div');
-      tmp.appendChild(document.createTextNode(decodeURIComponent(str)));
+      tmp.appendChild(document.createTextNode(String(str)));
       return tmp.innerHTML;
     }
 
-    // Decode a JWT and return its payload object (no verification needed here)
     function decodeJwtPayload(token) {
       try {
         var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-        var json   = decodeURIComponent(
+        var json = decodeURIComponent(
           atob(base64).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
           }).join('')
@@ -132,37 +135,81 @@
       }
     }
 
-    // 1 — Query string
-    var searchParams = new URLSearchParams(window.location.search);
-    var username     = searchParams.get('username');
-    var email        = searchParams.get('email');
+    function showSuccess(username, email) {
+      if (loadingEl)  loadingEl.style.display  = 'none';
+      if (errorEl)    errorEl.style.display    = 'none';
+      if (successEl)  successEl.style.display  = 'block';
+      if (iconWrapEl) iconWrapEl.style.display = 'flex';
 
-    // 2 — Hash fragment (Supabase appends #access_token=...&... here)
-    if (!username || !email) {
-      var hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-      username = username || hashParams.get('username');
-      email    = email    || hashParams.get('email');
-
-      // 3 — Decode email from Supabase JWT access_token
-      if (!email) {
-        var accessToken = hashParams.get('access_token');
-        if (accessToken) {
-          var payload = decodeJwtPayload(accessToken);
-          if (payload) {
-            email    = email    || payload.email || null;
-            username = username || (payload.user_metadata && payload.user_metadata.username) || null;
-          }
-        }
-      }
+      var name = sanitise(username) || 'User';
+      var mail = sanitise(email)    || '—';
+      usernameEl.textContent = name;
+      emailEl.textContent    = mail;
+      if (welcomeEl) welcomeEl.textContent = 'Welcome, ' + name + '! \uD83C\uDF89';
     }
 
-    usernameEl.textContent = sanitise(username) || 'User';
-    emailEl.textContent    = sanitise(email)    || '—';
+    function showError(msg) {
+      if (loadingEl)  loadingEl.style.display  = 'none';
+      if (successEl)  successEl.style.display  = 'none';
+      if (iconWrapEl) iconWrapEl.style.display = 'none';
+      if (errorEl)    errorEl.style.display    = 'block';
+      if (errorMsgEl) errorMsgEl.textContent   =
+        msg || 'This confirmation link has expired or is invalid.';
+    }
 
-    // Personalised welcome greeting
-    if (welcomeEl) {
-      var displayName = sanitise(username) || 'there';
-      welcomeEl.textContent = 'Welcome, ' + displayName + '! 🎉';
+    var params = new URLSearchParams(window.location.search);
+    var code   = params.get('code');
+
+    if (code) {
+      // PKCE flow: exchange the auth code to confirm the user server-side
+      if (window.supabase) {
+        var client = window.supabase.createClient(
+          'https://dilhsyykvfxdieswqolm.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpbGhzeXlrdmZ4ZGllc3dxb2xtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1MzM2NjgsImV4cCI6MjA4NjEwOTY2OH0.4E04DDIgkvEJm7Ff2OlqYNTS64NVIC6RvBhtOfYyMtQ',
+          { auth: { flowType: 'pkce', detectSessionInUrl: false } }
+        );
+        client.auth.exchangeCodeForSession(code)
+          .then(function (result) {
+            if (result.error) {
+              showError('Verification failed: ' + result.error.message +
+                '. Please sign up again.');
+            } else if (result.data && result.data.session) {
+              var user     = result.data.session.user;
+              var email    = user.email || '—';
+              var username = (user.user_metadata && user.user_metadata.username)
+                             || email.split('@')[0];
+              showSuccess(username, email);
+            } else {
+              showError('Verification failed. Please sign up again or contact support.');
+            }
+          })
+          .catch(function () {
+            showError('Network error during verification. Please check your connection and try again.');
+          });
+      } else {
+        // SDK not yet loaded — reload once after a short delay
+        setTimeout(function () {
+          if (window.supabase) {
+            window.location.reload();
+          } else {
+            showError('Failed to load the verification library. Please refresh this page.');
+          }
+        }, 2500);
+      }
+    } else {
+      // Fallback: implicit flow — tokens in hash (older Supabase configs)
+      var hashParams  = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      var accessToken = hashParams.get('access_token');
+
+      if (accessToken) {
+        var payload  = decodeJwtPayload(accessToken);
+        var email    = (payload && payload.email) || '—';
+        var username = (payload && payload.user_metadata && payload.user_metadata.username)
+                       || (email !== '—' ? email.split('@')[0] : 'User');
+        showSuccess(username, email);
+      } else {
+        showError('No confirmation code found. Please use the original link from your email.');
+      }
     }
   }
 

@@ -864,6 +864,55 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .confirm-footer-note a:hover { text-decoration: underline; }
 
+/* Loading spinner (shown while PKCE code exchange is in progress) */
+.confirm-loading {
+  text-align: center;
+  padding: 28px 0 20px;
+}
+.confirm-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(212, 132, 30, 0.18);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: confirmSpin 0.75s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes confirmSpin {
+  to { transform: rotate(360deg); }
+}
+.confirm-loading-text {
+  color: var(--gray-500);
+  font-size: 0.95rem;
+  margin: 0;
+}
+/* Error card (shown if PKCE exchange fails or link is expired) */
+.confirm-error-card {
+  text-align: center;
+  padding: 20px 24px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md, 12px);
+  margin: 8px 0 20px;
+}
+#confirm-error-msg {
+  color: #dc2626;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+.confirm-error-sub {
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  margin: 0;
+}
+.confirm-error-sub a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+.confirm-error-sub a:hover { text-decoration: underline; }
+
 /* ============================================================
    ANIMATIONS
    ============================================================ */
