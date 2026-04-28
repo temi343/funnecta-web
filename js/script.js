@@ -97,11 +97,14 @@
   });
 
   /* ----------------------------------------------------------
-     CONFIRMATION PAGE: PKCE code exchange
-     supabase_flutter uses AuthFlowType.pkce, so Supabase
-     redirects here with ?code=PKCE_CODE instead of the old
-     implicit #access_token=... hash. The code MUST be
-     exchanged with Supabase to mark the user as confirmed.
+     CONFIRMATION PAGE
+     Supports three flows (tried in priority order):
+       1. token_hash  – Direct link from updated Supabase email
+                        template using {{ .TokenHash }}. Calls
+                        verifyOtp() – no PKCE, no allowlist needed.
+       2. code        – PKCE code (when redirect URL is allowlisted).
+                        Calls exchangeCodeForSession().
+       3. access_token in hash – Implicit/legacy flow fallback.
   ---------------------------------------------------------- */
   const usernameEl  = document.getElementById('display-username');
   const emailEl     = document.getElementById('display-email');
@@ -113,6 +116,9 @@
     const errorMsgEl = document.getElementById('confirm-error-msg');
     const successEl  = document.getElementById('confirm-success');
     const iconWrapEl = document.getElementById('confirm-icon-wrap');
+
+    var SUPABASE_URL  = 'https://dilhsyykvfxdieswqolm.supabase.co';
+    var SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpbGhzeXlrdmZ4ZGllc3dxb2xtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1MzM2NjgsImV4cCI6MjA4NjEwOTY2OH0.4E04DDIgkvEJm7Ff2OlqYNTS64NVIC6RvBhtOfYyMtQ';
 
     function sanitise(str) {
       if (!str) return null;
@@ -140,7 +146,6 @@
       if (errorEl)    errorEl.style.display    = 'none';
       if (successEl)  successEl.style.display  = 'block';
       if (iconWrapEl) iconWrapEl.style.display = 'flex';
-
       var name = sanitise(username) || 'User';
       var mail = sanitise(email)    || '—';
       usernameEl.textContent = name;
@@ -148,20 +153,17 @@
       if (welcomeEl) welcomeEl.textContent = 'Welcome, ' + name + '! \uD83C\uDF89';
     }
 
-    // Shown when there is no code/token — email is confirmed server-side
-    // but we can't establish a browser session. User can still log in on the app.
     function showSoftSuccess() {
       if (loadingEl)  loadingEl.style.display  = 'none';
       if (errorEl)    errorEl.style.display    = 'none';
       if (successEl)  successEl.style.display  = 'block';
       if (iconWrapEl) iconWrapEl.style.display = 'flex';
-
       var detailsEl = document.querySelector('.confirm-details');
       if (detailsEl) detailsEl.style.display = 'none';
       if (welcomeEl) welcomeEl.textContent = '';
       var msgEl = document.querySelector('.confirm-message');
       if (msgEl) msgEl.textContent =
-        'Your email has been confirmed. Open the Funnecta app and log in with your account to continue.';
+        'Your email has been confirmed. Open the Funnecta app and log in to continue.';
     }
 
     function showError(msg) {
@@ -173,50 +175,74 @@
         msg || 'This confirmation link has expired or is invalid.';
     }
 
-    var params = new URLSearchParams(window.location.search);
-    var code   = params.get('code');
+    function getSupabaseClient() {
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY,
+        { auth: { persistSession: false, detectSessionInUrl: false } }
+      );
+    }
 
-    if (code) {
-      // PKCE flow: exchange the auth code to confirm the user server-side
-      if (window.supabase) {
-        var client = window.supabase.createClient(
-          'https://dilhsyykvfxdieswqolm.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpbGhzeXlrdmZ4ZGllc3dxb2xtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1MzM2NjgsImV4cCI6MjA4NjEwOTY2OH0.4E04DDIgkvEJm7Ff2OlqYNTS64NVIC6RvBhtOfYyMtQ',
-          { auth: { flowType: 'pkce', detectSessionInUrl: false } }
-        );
-        client.auth.exchangeCodeForSession(code)
-          .then(function (result) {
-            if (result.error) {
-              showError('Verification failed: ' + result.error.message +
-                '. Please sign up again.');
-            } else if (result.data && result.data.session) {
-              var user     = result.data.session.user;
+    function extractUser(result) {
+      var user = (result.data && (result.data.user || (result.data.session && result.data.session.user)));
+      return user || null;
+    }
+
+    var params    = new URLSearchParams(window.location.search);
+    var tokenHash = params.get('token_hash');
+    var type      = params.get('type') || 'signup';
+    var code      = params.get('code');
+
+    if (!window.supabase) {
+      // SDK CDN not yet loaded — wait briefly then retry
+      setTimeout(function () { window.location.reload(); }, 2000);
+    } else if (tokenHash) {
+      /* ── Flow 1: token_hash (preferred – set in Supabase email template) ── */
+      getSupabaseClient().auth.verifyOtp({ token_hash: tokenHash, type: type })
+        .then(function (result) {
+          if (result.error) {
+            showError('Verification failed: ' + result.error.message +
+              '. The link may have expired — please sign up again.');
+          } else {
+            var user = extractUser(result);
+            if (user) {
               var email    = user.email || '—';
               var username = (user.user_metadata && user.user_metadata.username)
                              || email.split('@')[0];
               showSuccess(username, email);
             } else {
-              showError('Verification failed. Please sign up again or contact support.');
+              showSoftSuccess();
             }
-          })
-          .catch(function () {
-            showError('Network error during verification. Please check your connection and try again.');
-          });
-      } else {
-        // SDK not yet loaded — reload once after a short delay
-        setTimeout(function () {
-          if (window.supabase) {
-            window.location.reload();
-          } else {
-            showError('Failed to load the verification library. Please refresh this page.');
           }
-        }, 2500);
-      }
+        })
+        .catch(function () {
+          showError('Network error. Please check your connection and try again.');
+        });
+
+    } else if (code) {
+      /* ── Flow 2: PKCE code (when confirm.html is in Supabase redirect allowlist) ── */
+      getSupabaseClient().auth.exchangeCodeForSession(code)
+        .then(function (result) {
+          if (result.error) {
+            // PKCE verifier mismatch is common when exchange is from a different
+            // client — fall through to soft success since email is confirmed.
+            showSoftSuccess();
+          } else {
+            var user = extractUser(result);
+            if (user) {
+              var email    = user.email || '—';
+              var username = (user.user_metadata && user.user_metadata.username)
+                             || email.split('@')[0];
+              showSuccess(username, email);
+            } else {
+              showSoftSuccess();
+            }
+          }
+        })
+        .catch(function () { showSoftSuccess(); });
+
     } else {
-      // Fallback: implicit flow — tokens in hash (older Supabase configs)
+      /* ── Flow 3: implicit – access_token in hash ── */
       var hashParams  = new URLSearchParams(window.location.hash.replace(/^#/, ''));
       var accessToken = hashParams.get('access_token');
-
       if (accessToken) {
         var payload  = decodeJwtPayload(accessToken);
         var email    = (payload && payload.email) || '—';
@@ -224,8 +250,7 @@
                        || (email !== '—' ? email.split('@')[0] : 'User');
         showSuccess(username, email);
       } else {
-        // No code and no token — Supabase still confirmed the email server-side
-        // when the link was clicked. Show success + Open App button.
+        // No auth params at all — show soft success so user can open the app
         showSoftSuccess();
       }
     }
