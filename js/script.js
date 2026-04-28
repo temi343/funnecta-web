@@ -167,6 +167,25 @@
   }
 
   /* ----------------------------------------------------------
+     OPEN APP DEEP LINK
+     Tries funnecta://auth-callback first.
+     If the app is not installed the device won't respond,
+     so after 2 s we show the APK download fallback link.
+  ---------------------------------------------------------- */
+  window.openApp = function () {
+    var fallbackEl = document.getElementById('app-fallback');
+    var deepLink   = 'funnecta://auth-callback';
+
+    // Attempt to open the app via custom URI scheme
+    window.location.href = deepLink;
+
+    // If the app didn't open within 2 s, reveal the download fallback
+    setTimeout(function () {
+      if (fallbackEl) { fallbackEl.style.display = 'block'; }
+    }, 2000);
+  };
+
+  /* ----------------------------------------------------------
      SMOOTH ANCHOR SCROLL (augment native behavior on older
      browsers and account for fixed navbar height)
   ---------------------------------------------------------- */

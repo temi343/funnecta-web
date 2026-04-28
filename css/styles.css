@@ -838,8 +838,22 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   justify-content: center;
   padding: 16px 24px;
   font-size: 1rem;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  border: none;
 }
+.confirm-app-fallback {
+  font-size: .85rem;
+  color: var(--gray-500);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.confirm-app-fallback a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+.confirm-app-fallback a:hover { text-decoration: underline; }
 .confirm-footer-note {
   font-size: .8rem;
   color: var(--gray-400);
