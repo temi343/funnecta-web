@@ -148,6 +148,22 @@
       if (welcomeEl) welcomeEl.textContent = 'Welcome, ' + name + '! \uD83C\uDF89';
     }
 
+    // Shown when there is no code/token — email is confirmed server-side
+    // but we can't establish a browser session. User can still log in on the app.
+    function showSoftSuccess() {
+      if (loadingEl)  loadingEl.style.display  = 'none';
+      if (errorEl)    errorEl.style.display    = 'none';
+      if (successEl)  successEl.style.display  = 'block';
+      if (iconWrapEl) iconWrapEl.style.display = 'flex';
+
+      var detailsEl = document.querySelector('.confirm-details');
+      if (detailsEl) detailsEl.style.display = 'none';
+      if (welcomeEl) welcomeEl.textContent = '';
+      var msgEl = document.querySelector('.confirm-message');
+      if (msgEl) msgEl.textContent =
+        'Your email has been confirmed. Open the Funnecta app and log in with your account to continue.';
+    }
+
     function showError(msg) {
       if (loadingEl)  loadingEl.style.display  = 'none';
       if (successEl)  successEl.style.display  = 'none';
@@ -208,7 +224,9 @@
                        || (email !== '—' ? email.split('@')[0] : 'User');
         showSuccess(username, email);
       } else {
-        showError('No confirmation link detected. If you just clicked the email link, your email may already be confirmed — open the Funnecta app and try logging in.');
+        // No code and no token — Supabase still confirmed the email server-side
+        // when the link was clicked. Show success + Open App button.
+        showSoftSuccess();
       }
     }
   }
