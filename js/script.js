@@ -157,17 +157,8 @@
         msg || 'This confirmation link has expired or is invalid.';
     }
 
-    var params   = new URLSearchParams(window.location.search);
-    var code     = params.get('code');
-    var preUsername = sanitise(params.get('username'));
-    var preEmail    = sanitise(params.get('email'));
-
-    // Show username/email immediately (from URL params) while exchange runs
-    if (preUsername || preEmail) {
-      usernameEl.textContent = preUsername || 'User';
-      emailEl.textContent    = preEmail    || '—';
-      if (welcomeEl) welcomeEl.textContent = 'Welcome, ' + (preUsername || 'there') + '! \uD83C\uDF89';
-    }
+    var params = new URLSearchParams(window.location.search);
+    var code   = params.get('code');
 
     if (code) {
       // PKCE flow: exchange the auth code to confirm the user server-side
@@ -217,7 +208,7 @@
                        || (email !== '—' ? email.split('@')[0] : 'User');
         showSuccess(username, email);
       } else {
-        showError('No confirmation code found. Please use the original link from your email.');
+        showError('No confirmation link detected. If you just clicked the email link, your email may already be confirmed — open the Funnecta app and try logging in.');
       }
     }
   }
