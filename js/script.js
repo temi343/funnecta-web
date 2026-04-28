@@ -97,26 +97,73 @@
   });
 
   /* ----------------------------------------------------------
-     CONFIRMATION PAGE: URL param extraction
+     CONFIRMATION PAGE: robust URL param extraction
+     Sources tried in order:
+       1. Query string  (?username=...&email=...)
+       2. Hash fragment (#username=...&email=...)
+       3. Supabase JWT  (access_token email claim)
   ---------------------------------------------------------- */
-  const usernameEl = document.getElementById('display-username');
-  const emailEl    = document.getElementById('display-email');
+  const usernameEl  = document.getElementById('display-username');
+  const emailEl     = document.getElementById('display-email');
+  const welcomeEl   = document.getElementById('display-welcome');
 
   if (usernameEl && emailEl) {
-    const params   = new URLSearchParams(window.location.search);
-    const username = params.get('username');
-    const email    = params.get('email');
 
     // Sanitise: strip HTML to prevent XSS
     function sanitise(str) {
       if (!str) return null;
-      const tmp = document.createElement('div');
-      tmp.appendChild(document.createTextNode(str));
+      var tmp = document.createElement('div');
+      tmp.appendChild(document.createTextNode(decodeURIComponent(str)));
       return tmp.innerHTML;
     }
 
-    usernameEl.textContent = sanitise(username) || 'Unknown';
-    emailEl.textContent    = sanitise(email)    || 'Unknown';
+    // Decode a JWT and return its payload object (no verification needed here)
+    function decodeJwtPayload(token) {
+      try {
+        var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        var json   = decodeURIComponent(
+          atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join('')
+        );
+        return JSON.parse(json);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // 1 — Query string
+    var searchParams = new URLSearchParams(window.location.search);
+    var username     = searchParams.get('username');
+    var email        = searchParams.get('email');
+
+    // 2 — Hash fragment (Supabase appends #access_token=...&... here)
+    if (!username || !email) {
+      var hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      username = username || hashParams.get('username');
+      email    = email    || hashParams.get('email');
+
+      // 3 — Decode email from Supabase JWT access_token
+      if (!email) {
+        var accessToken = hashParams.get('access_token');
+        if (accessToken) {
+          var payload = decodeJwtPayload(accessToken);
+          if (payload) {
+            email    = email    || payload.email || null;
+            username = username || (payload.user_metadata && payload.user_metadata.username) || null;
+          }
+        }
+      }
+    }
+
+    usernameEl.textContent = sanitise(username) || 'User';
+    emailEl.textContent    = sanitise(email)    || '—';
+
+    // Personalised welcome greeting
+    if (welcomeEl) {
+      var displayName = sanitise(username) || 'there';
+      welcomeEl.textContent = 'Welcome, ' + displayName + '! 🎉';
+    }
   }
 
   /* ----------------------------------------------------------

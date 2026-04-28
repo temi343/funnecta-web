@@ -785,6 +785,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: 12px;
   letter-spacing: -.01em;
 }
+.confirm-welcome {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: 8px;
+  letter-spacing: -.01em;
+}
 .confirm-message {
   font-size: 1rem;
   color: var(--gray-600);
