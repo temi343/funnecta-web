@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -64,10 +66,10 @@
         </div>
         <div class="hero-proof hero-anim" data-delay="0.4">
           <div class="proof-avatars">
-            <img src="assets/images/profile1.png" alt="user" class="avatar" />
-            <img src="assets/images/profile2.png" alt="user" class="avatar" />
-            <img src="assets/images/profile3.png" alt="user" class="avatar" />
-            <img src="assets/images/profile4.png" alt="user" class="avatar" />
+            <img src="assets/images/profile.png" alt="user" class="avatar" />
+            <img src="assets/images/profile.png" alt="user" class="avatar" />
+            <img src="assets/images/profile.png" alt="user" class="avatar" />
+            <img src="assets/images/profile.png" alt="user" class="avatar" />
           </div>
           <div class="proof-text">
             <span class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
@@ -77,104 +79,8 @@
       </div>
       <div class="hero-mockups hero-anim" data-delay="0.15">
         <div class="mockup-bg-blob"></div>
-        <!-- Phone Primary: Home / Communities screen -->
-        <div class="phone-mockup phone-primary">
-          <div class="phone-notch"></div>
-          <div class="phone-screen">
-            <div class="pm-feed">
-              <!-- status bar -->
-              <div class="pm-status-bar">
-                <span class="pm-sb-time">9:41</span>
-                <div class="pm-sb-icons">
-                  <svg viewBox="0 0 20 14" width="10" height="7"><rect x="0" y="7" width="3" height="7" rx="1" fill="#111"/><rect x="4.5" y="5" width="3" height="9" rx="1" fill="#111"/><rect x="9" y="3" width="3" height="11" rx="1" fill="#111"/><rect x="13.5" y="0" width="3" height="14" rx="1" fill="#111"/></svg>
-                  <svg viewBox="0 0 20 14" width="10" height="7"><path d="M10 1C5.5 1 1.6 3.2 0 6.5l2 1.8C3.4 5.8 6.5 4 10 4s6.6 1.8 8 4.3l2-1.8C18.4 3.2 14.5 1 10 1z" fill="#111"/><path d="M10 5.5c-2.4 0-4.5 1.1-5.8 2.8l2 1.7C7 8.9 8.4 8.2 10 8.2s3 .7 3.8 1.8l2-1.7C14.5 6.6 12.4 5.5 10 5.5z" fill="#111"/><circle cx="10" cy="13" r="1.5" fill="#111"/></svg>
-                  <svg viewBox="0 0 25 12" width="15" height="8"><rect x="0" y="1" width="21" height="10" rx="2.5" fill="none" stroke="#111" stroke-width="1.2"/><rect x="1.5" y="2.5" width="15" height="7" rx="1.5" fill="#111"/><rect x="22" y="3.5" width="2.5" height="5" rx="1.5" fill="#111"/></svg>
-                </div>
-              </div>
-              <!-- feed tabs -->
-              <div class="pm-feed-tabs">
-                <div class="pft pft-active">Posts</div>
-                <div class="pft">Friends (3)</div>
-                <svg class="pft-bell" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" width="10" height="10"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-              </div>
-              <!-- search -->
-              <div class="pm-search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" width="8" height="8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                Search Funnecta...
-              </div>
-              <!-- Post: Jessica -->
-              <div class="pm-post">
-                <div class="pm-post-hd">
-                  <div class="pm-post-ava" style="background:#e07b5a">J</div>
-                  <div class="pm-post-meta"><div class="pm-post-name">Jessica</div><div class="pm-post-time">10 ago</div></div>
-                  <span class="pm-post-more">&#8943;</span>
-                </div>
-                <div class="pm-post-body">Just put together a guitar... Anyone down for a mini jam session this weekend? &#127928;</div>
-                <div class="pm-post-stats">271 likes &middot; 24 comments</div>
-                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
-              </div>
-              <!-- Post: Alex -->
-              <div class="pm-post">
-                <div class="pm-post-hd">
-                  <div class="pm-post-ava" style="background:#5a8fe0">A</div>
-                  <div class="pm-post-meta"><div class="pm-post-name">Alex</div><div class="pm-post-time">2h ago</div></div>
-                  <span class="pm-post-more">&#8943;</span>
-                </div>
-                <div class="pm-post-body">Exploring new coffee shops in the city. Drop your favorite spots below! &#9749;</div>
-                <div class="pm-post-stats">154 likes &middot; 12 comments</div>
-                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
-              </div>
-              <!-- Post: Mina -->
-              <div class="pm-post">
-                <div class="pm-post-hd">
-                  <div class="pm-post-ava" style="background:#5ac47e">M</div>
-                  <div class="pm-post-meta"><div class="pm-post-name">Mina</div><div class="pm-post-time">5h ago</div></div>
-                  <span class="pm-post-more">&#8943;</span>
-                </div>
-                <div class="pm-post-body">Just ran my first 5K this morning. Small steps, big progress. &#127939;</div>
-                <div class="pm-post-stats">311 likes &middot; 31 comments</div>
-                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
-              </div>
-              <!-- Post: Taylor -->
-              <div class="pm-post">
-                <div class="pm-post-hd">
-                  <div class="pm-post-ava" style="background:#a05ae0">T</div>
-                  <div class="pm-post-meta"><div class="pm-post-name">Taylor</div><div class="pm-post-time">1d ago</div></div>
-                  <span class="pm-post-more">&#8943;</span>
-                </div>
-                <div class="pm-post-body">Photography walk downtown today. Caught some beautiful light. &#128247;</div>
-                <div class="pm-post-stats">98 likes &middot; 5 comments</div>
-                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Phone Secondary: Chat screen -->
-        <div class="phone-mockup phone-secondary">
-          <div class="phone-notch"></div>
-          <div class="phone-screen">
-            <div class="pm-chat">
-              <div class="pm-chat-hd">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="15 18 9 12 15 6"/></svg>
-                <div class="pm-chat-info"><div class="pm-chat-name">James Miller</div><div class="pm-chat-online">Online</div></div>
-                <div class="pm-chat-acts">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 12 19.79 19.79 0 0 1 1.28 3.34 2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.27a16 16 0 0 0 6 6l.66-.66a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16z"/></svg>
-                  <span style="font-size:11px;font-weight:700;color:#555">&#8942;</span>
-                </div>
-              </div>
-              <div class="pm-msgs">
-                <div class="pm-msg pm-msg-in"><div class="pm-bubble pm-bubble-in">Hey! &#128075;</div><div class="pm-time">11:20 AM</div></div>
-                <div class="pm-msg pm-msg-out"><div class="pm-bubble pm-bubble-out">Hi James! Great to connect with you.</div><div class="pm-time">11:22 AM</div></div>
-                <div class="pm-msg pm-msg-in"><div class="pm-bubble pm-bubble-in">Looking forward to collaborating!</div><div class="pm-time">11:01 AM</div></div>
-                <div class="pm-msg pm-msg-out"><div class="pm-bubble pm-bubble-out">Same here! Let's build something amazing.</div><div class="pm-time">11:22 AM</div></div>
-              </div>
-              <div class="pm-input-bar">
-                <div class="pm-input-fld">Type a message...</div>
-                <div class="pm-send-btn"><svg viewBox="0 0 24 24" fill="white" width="9" height="9"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img src="assets/images/mpBXo.png" alt="Funnecta home screen" class="mockup mockup-back" />
+        <img src="assets/images/sANe6.png" alt="Funnecta chat screen" class="mockup mockup-front" />
       </div>
     </div>
     <div class="hero-circle c1"></div>
@@ -208,14 +114,14 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="36" height="36"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
           <h3>Communities</h3>
-          <p>Discover and join communities built around what you love.</p>
+          <p>Join communities, share ideas, and learn from others.</p>
         </div>
         <div class="feature-card reveal-el" style="--delay:0.3s">
-          <div class="fc-icon fc-icon--trivia">
-            <img src="assets/images/trivia%20icon.png" alt="Trivia Games" width="44" height="44" style="object-fit:contain;">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="36" height="36"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="16 2 12 7 8 2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
           </div>
           <h3>Trivia Games</h3>
-          <p>Engage with friends in fun trivia challenges across various topics.</p>
+          <p>Challenge friends with fun trivia games and earn rewards.</p>
         </div>
       </div>
     </div>
@@ -223,40 +129,37 @@
 
   <!-- ========== ABOUT ========== -->
   <section class="about" id="about">
-    <!-- photo underlay aligned right -->
-    <div class="about-bg-img"></div>
-    <!-- white gradient overlay from left -->
-    <div class="about-overlay"></div>
-    <!-- text content -->
-    <div class="about-content">
+    <div class="section-inner about-inner">
       <div class="about-text slide-left">
         <span class="section-eyebrow">ABOUT US</span>
         <h2 class="section-title">Building meaningful<br /><span class="text-orange">connections for everyone.</span></h2>
-        <p class="about-desc">Funnecta is more than just an app – it's a community where people come together to connect, collaborate, and create opportunities.</p>
+        <p class="about-desc">Funnecta is more than just an app - it's a community where people come together to connect, collaborate, and create opportunities.</p>
         <div class="about-stats">
           <div class="stat-item">
-            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
             <div><strong>10K+</strong><span>Active Users</span></div>
           </div>
           <div class="stat-item">
-            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
             <div><strong>500+</strong><span>Communities</span></div>
           </div>
           <div class="stat-item">
-            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
             <div><strong>50+</strong><span>Countries</span></div>
           </div>
           <div class="stat-item">
-            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
             <div><strong>100K+</strong><span>Messages Sent</span></div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- floating card bottom-right over photo -->
-    <div class="about-card-float">
-      <img src="assets/images/app_icon.png" alt="Funnecta" class="about-card-logo" />
-      <span>Join Funnecta today and be part of something amazing.</span>
+      <div class="about-img-wrap slide-right">
+        <img src="assets/images/web.png" alt="Funnecta community" class="about-img" />
+        <div class="about-card-float">
+          <img src="assets/images/app_icon.png" alt="Funnecta" class="about-card-logo" />
+          <span>Join Funnecta today and be part of something amazing.</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -355,4 +258,8 @@
 
   <script src="js/script.js"></script>
 </body>
-</html>
+</html>`;
+
+const p = 'C:\\Users\\Temiloluwa\\Desktop\\Funnecta_app\\funnecta_app\\Funnecta Web\\index.html';
+fs.writeFileSync(p, html, 'utf8');
+console.log('Written:', html.split('\n').length, 'lines');

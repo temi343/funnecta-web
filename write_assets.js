@@ -1,4 +1,11 @@
-/* ============================================================
+const fs = require('fs');
+const path = require('path');
+const base = __dirname;
+
+/* ═══════════════════════════════════════════════════════════
+   styles.css  – complete rewrite for new index.html layout
+   ═══════════════════════════════════════════════════════════ */
+const css = `/* ============================================================
    FUNNECTA – Main Stylesheet  (redesigned 2026)
    ============================================================ */
 
@@ -117,7 +124,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   gap: 56px; align-items: center;
 }
 /* ── Hero Text ── */
-.hero-text { display: flex; flex-direction: column; justify-content: center; }
 .hero-badge {
   display: inline-flex; align-items: center;
   background: var(--orange-pale); color: var(--orange);
@@ -159,8 +165,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-proof { display: flex; align-items: center; gap: 14px; }
 .proof-avatars { display: flex; align-items: center; }
 .avatar {
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 2.5px solid var(--white); object-fit: cover;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--white); object-fit: cover;
   margin-left: -10px; transition: transform .2s;
 }
 .avatar:first-child { margin-left: 0; }
@@ -178,99 +184,25 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border-radius: 50%;
   z-index: 0;
 }
-/* ── Coded Phone Mockups ── */
-.phone-mockup {
-  position: absolute;
-  border-radius: 32px;
-  border: 3px solid #1a1a1a;
-  background: #fff;
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
-}
-.phone-primary {
-  width: 200px; height: 422px;
-  top: 10px; left: 50%;
-  transform: translateX(-90%) rotate(-5deg);
+.mockup {
+  position: absolute; object-fit: contain;
+  filter: drop-shadow(0 24px 48px rgba(0,0,0,.18));
+  border-radius: 28px;
   z-index: 2;
 }
-.phone-secondary {
-  width: 176px; height: 374px;
-  top: 44px; left: 50%;
-  transform: translateX(5%) rotate(4deg);
-  z-index: 1; opacity: .95;
+.mockup-back {
+  width: 200px;
+  top: 20px; left: 50%;
+  transform: translateX(-80%) rotate(-8deg);
+  z-index: 1;
+  opacity: .92;
 }
-.phone-notch {
-  position: absolute; top: 8px; left: 50%;
-  transform: translateX(-50%);
-  width: 56px; height: 13px;
-  background: #1a1a1a; border-radius: 7px; z-index: 20;
+.mockup-front {
+  width: 220px;
+  top: 40px; left: 50%;
+  transform: translateX(-20%) rotate(5deg);
+  z-index: 2;
 }
-.phone-screen { width: 100%; height: 100%; overflow: hidden; background: #fff; }
-
-/* Phone home screen */
-.pm-home { padding: 30px 10px 6px; height: 100%; overflow: hidden; font-family: var(--font); }
-.pm-home-hd { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 7px; }
-.pm-greeting { font-size: 7px; color: #888; }
-.pm-uname { font-size: 10.5px; font-weight: 800; color: #111; }
-.pm-ava-sm { width: 24px; height: 24px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1.5px solid #eee; }
-.pm-ava-sm img { width: 100%; height: 100%; object-fit: cover; }
-.pm-search { background: #f5f5f5; border-radius: 7px; padding: 5px 8px; font-size: 6.5px; color: #aaa; margin-bottom: 7px; display: flex; align-items: center; gap: 4px; }
-.pm-tabs { display: flex; border-bottom: 1.5px solid #f0f0f0; margin-bottom: 7px; }
-.pm-tab { flex: 1; text-align: center; padding: 3px 0; font-size: 6.5px; color: #aaa; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.pm-tab-active { color: var(--orange); border-bottom: 2px solid var(--orange); margin-bottom: -1.5px; }
-.pm-sec-hd { display: flex; justify-content: space-between; align-items: center; font-size: 7px; font-weight: 700; color: #111; margin-bottom: 5px; }
-.pm-see-all { color: var(--orange); font-weight: 500; }
-.pm-comm-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid #f5f5f5; }
-.pm-comm-ico { width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0; color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.pm-comm-info { flex: 1; min-width: 0; }
-.pm-comm-name { font-size: 7px; font-weight: 700; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pm-comm-meta { font-size: 6px; color: #aaa; }
-.pm-join { font-size: 6px; font-weight: 700; color: var(--orange); border: 1px solid var(--orange); border-radius: 4px; padding: 2px 5px; flex-shrink: 0; }
-.pm-conn-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; }
-.pm-conn-ava { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #F05A1A, #ff8547); flex-shrink: 0; }
-.pm-conn-name { font-size: 7px; font-weight: 700; color: #111; }
-.pm-conn-role { font-size: 6px; color: #aaa; }
-
-/* Phone feed screen */
-.pm-feed { height: 100%; overflow: hidden; font-family: var(--font); display: flex; flex-direction: column; padding-top: 18px; }
-.pm-status-bar { display: flex; justify-content: space-between; align-items: center; padding: 2px 10px 4px; flex-shrink: 0; }
-.pm-sb-time { font-size: 7px; font-weight: 800; color: #111; }
-.pm-sb-icons { display: flex; align-items: center; gap: 3px; }
-.pm-feed-tabs { display: flex; align-items: center; padding: 0 10px 5px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; gap: 5px; }
-.pft { font-size: 6.5px; font-weight: 600; color: #aaa; padding: 2px 7px; border-radius: 10px; }
-.pft-active { color: #fff; background: var(--orange); }
-.pft-bell { margin-left: auto; flex-shrink: 0; }
-.pm-post { padding: 5px 10px; border-bottom: 1px solid #f5f5f5; flex-shrink: 0; }
-.pm-post-hd { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
-.pm-post-ava { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.pm-post-meta { flex: 1; min-width: 0; }
-.pm-post-name { font-size: 7px; font-weight: 700; color: #111; }
-.pm-post-time { font-size: 5.5px; color: #bbb; }
-.pm-post-more { font-size: 9px; color: #ccc; line-height: 1; }
-.pm-post-body { font-size: 6.5px; color: #333; line-height: 1.45; margin-bottom: 3px; }
-.pm-post-stats { font-size: 5.5px; color: #aaa; margin-bottom: 3px; border-bottom: 1px solid #f5f5f5; padding-bottom: 3px; }
-.pm-post-acts { display: flex; gap: 0; }
-.pm-post-acts span { font-size: 5px; color: #888; flex: 1; text-align: center; white-space: nowrap; }
-
-/* Phone chat screen */
-.pm-chat { display: flex; flex-direction: column; height: 100%; padding-top: 28px; font-family: var(--font); }
-.pm-chat-hd { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; color: #111; }
-.pm-chat-info { flex: 1; }
-.pm-chat-name { font-size: 8px; font-weight: 700; color: #111; }
-.pm-chat-online { font-size: 6px; color: #22c55e; font-weight: 500; }
-.pm-chat-acts { display: flex; align-items: center; gap: 4px; color: #666; }
-.pm-msgs { flex: 1; overflow: hidden; padding: 7px 8px; display: flex; flex-direction: column; gap: 6px; }
-.pm-msg-in { align-self: flex-start; max-width: 80%; }
-.pm-msg-out { align-self: flex-end; max-width: 80%; }
-.pm-bubble { padding: 5px 8px; border-radius: 8px; font-size: 6.5px; line-height: 1.4; }
-.pm-bubble-in { background: #f1f1f1; color: #111; border-bottom-left-radius: 2px; }
-.pm-bubble-out { background: var(--orange); color: #fff; border-bottom-right-radius: 2px; }
-.pm-time { font-size: 5.5px; color: #bbb; margin-top: 2px; }
-.pm-msg-in .pm-time { text-align: left; }
-.pm-msg-out .pm-time { text-align: right; }
-.pm-input-bar { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border-top: 1px solid #f0f0f0; flex-shrink: 0; }
-.pm-input-fld { flex: 1; font-size: 6.5px; color: #bbb; background: #f5f5f5; border-radius: 6px; padding: 4px 7px; }
-.pm-send-btn { width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 /* Decorative circles */
 .hero-circle { position: absolute; border-radius: 50%; pointer-events: none; }
 .c1 { width: 540px; height: 540px; top: -180px; right: -120px; background: radial-gradient(circle, rgba(240,90,26,.07) 0%, transparent 70%); }
@@ -302,10 +234,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    ============================================================ */
 .features { padding: 100px 0; background: var(--white); }
 .features-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
-.fc-icon--trivia { background: var(--white); border: none; box-shadow: none; }
 .feature-card {
   background: var(--white); border: 1.5px solid var(--gray-200);
   border-radius: var(--radius); padding: 32px 24px;
@@ -331,50 +262,39 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ============================================================
    ABOUT
    ============================================================ */
-.about {
-  position: relative; overflow: hidden;
-  padding: 90px 0; background: var(--white);
-  min-height: 400px;
+.about { padding: 100px 0; background: var(--gray-50); }
+.about-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 72px; align-items: center;
 }
-/* photo underlay — right 60% of section */
-.about-bg-img {
-  position: absolute; top: 0; right: 0;
-  width: 62%; height: 100%;
-  background: url(../assets/images/web.png) center/cover no-repeat;
-  z-index: 0;
-}
-/* white gradient from left, fades into transparent at ~65% */
-.about-overlay {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(to right, #fff 38%, rgba(255,255,255,.92) 50%, rgba(255,255,255,.55) 62%, transparent 72%);
-  z-index: 1;
-}
-/* text content sits above overlay */
-.about-content {
-  position: relative; z-index: 2;
-  max-width: var(--max-w); margin: 0 auto;
-  padding: 0 var(--pad);
-}
-.about-text { max-width: 500px; }
 .about-text .section-eyebrow { margin-bottom: 12px; }
 .about-text .section-title { margin-bottom: 20px; }
 .about-desc { font-size: 1rem; color: var(--gray-600); line-height: 1.75; margin-bottom: 36px; }
-/* stats — horizontal inline row, no white card boxes */
-.about-stats { display: flex; flex-direction: row; gap: 24px; flex-wrap: wrap; }
-.stat-item { display: flex; align-items: center; gap: 10px; background: none; border: none; padding: 0; box-shadow: none; }
+.about-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.stat-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); padding: 16px 18px;
+  box-shadow: var(--shadow-sm); transition: transform .25s, box-shadow .25s;
+}
+.stat-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .stat-icon {
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 40px; height: 40px; border-radius: 10px;
   background: var(--orange-pale); color: var(--orange);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.stat-item div { display: flex; flex-direction: column; gap: 1px; }
-.stat-item strong { font-size: 1rem; font-weight: 800; color: var(--gray-900); line-height: 1; }
-.stat-item span { font-size: .72rem; color: var(--gray-500, #6b7280); font-weight: 500; }
-/* floating card — bottom-right, over photo */
+.stat-item div { display: flex; flex-direction: column; gap: 2px; }
+.stat-item strong { font-size: 1.1rem; font-weight: 800; color: var(--gray-900); line-height: 1; }
+.stat-item span { font-size: .78rem; color: var(--gray-500, #6b7280); font-weight: 500; }
+/* About image */
+.about-img-wrap { position: relative; }
+.about-img { width: 100%; border-radius: 20px; object-fit: cover; max-height: 440px; box-shadow: var(--shadow-lg); }
 .about-card-float {
-  position: absolute; bottom: 28px; right: 48px; z-index: 3;
+  position: absolute; bottom: 24px; right: 24px;
   background: var(--white); border-radius: var(--radius);
   padding: 14px 18px; display: flex; align-items: center; gap: 12px;
   box-shadow: var(--shadow-md); max-width: 230px;
@@ -492,13 +412,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .hamburger { display: flex; }
   .hero-inner { grid-template-columns: 1fr; gap: 48px; }
   .hero { padding-top: calc(var(--nav-h) + 40px); min-height: unset; }
-  .hero-mockups { min-height: 300px; }
-  .phone-primary   { width: 156px; height: 330px; transform: translateX(-90%) rotate(-5deg); }
-  .phone-secondary { width: 138px; height: 292px; transform: translateX(5%) rotate(4deg); }
+  .hero-mockups { min-height: 320px; }
+  .mockup-back  { width: 150px; }
+  .mockup-front { width: 165px; }
   .features-grid { grid-template-columns: 1fr 1fr; }
-  .about-bg-img { width: 100%; opacity: .35; }
-  .about-overlay { background: linear-gradient(to right, #fff 55%, rgba(255,255,255,.7) 75%, transparent 100%); }
-  .about-stats { gap: 16px; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
   .faq-grid { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
@@ -507,8 +426,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .hero-buttons { flex-direction: column; align-items: flex-start; }
   .btn-appstore, .btn-googleplay { width: 100%; max-width: 240px; }
   .features-grid { grid-template-columns: 1fr; }
-  .about-stats { flex-direction: column; gap: 12px; }
-  .about-card-float { right: 16px; bottom: 16px; }
+  .about-stats { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; gap: 28px; }
   .newsletter-form { flex-direction: column; }
   .newsletter-btn { text-align: center; }
@@ -520,3 +438,257 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    CONFIRMATION PAGE
    ============================================================ */
 /* (appended from repository) */
+`;
+
+/* ═══════════════════════════════════════════════════════════
+   script.js  – complete rewrite
+   ═══════════════════════════════════════════════════════════ */
+const js = `(function () {
+  'use strict';
+
+  /* ── Navbar scroll shadow ── */
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function () {
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  /* ── Hamburger toggle ── */
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', function () {
+      var open = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', function (e) {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+      }
+    });
+    /* Close mobile menu on link click */
+    mobileMenu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+      });
+    });
+  }
+
+  /* ── Active nav link on scroll ── */
+  var sections = document.querySelectorAll('section[id], footer[id]');
+  var navLinks  = document.querySelectorAll('.nav-link');
+  var sectionObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        navLinks.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(function (s) { sectionObserver.observe(s); });
+
+  /* ── Hero stagger animation ── */
+  document.querySelectorAll('.hero-anim').forEach(function (el) {
+    var delay = parseFloat(el.dataset.delay || 0);
+    setTimeout(function () { el.classList.add('animated'); }, delay * 1000);
+  });
+
+  /* ── Scroll reveal (reveal-el, slide-left, slide-right) ── */
+  var revealEls = document.querySelectorAll('.reveal-el, .slide-left, .slide-right');
+  var revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        var delay = parseFloat(el.style.getPropertyValue('--delay') || 0);
+        setTimeout(function () { el.classList.add('visible'); }, delay * 1000);
+        revealObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(function (el) { revealObserver.observe(el); });
+
+  /* ── FAQ accordion ── */
+  document.querySelectorAll('.faq-question').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.faq-item');
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function (i) { i.classList.remove('open'); });
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  /* ── Newsletter ── */
+  window.handleNewsletter = function (e) {
+    e.preventDefault();
+    var form = e.target;
+    var input = form.querySelector('input[type="email"]');
+    if (!input || !input.value.includes('@')) return;
+    var btn = form.querySelector('.newsletter-btn');
+    if (btn) { btn.textContent = 'Subscribed \u2713'; btn.disabled = true; }
+    if (input) { input.disabled = true; }
+  };
+
+  /* ── iOS coming-soon toast ── */
+  window.showIosComingSoon = function () {
+    var toast = document.getElementById('ios-toast');
+    if (!toast) return;
+    toast.classList.add('show');
+    setTimeout(function () { toast.classList.remove('show'); }, 3500);
+  };
+
+  /* ── Smooth anchor scroll ── */
+  document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+    anchor.addEventListener('click', function (e) {
+      var id = this.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      var navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 70;
+      var top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+
+  /* ----------------------------------------------------------
+     CONFIRMATION PAGE
+     Supports three flows (tried in priority order):
+       1. token_hash  - Direct link from updated Supabase email
+                        template using {{ .TokenHash }}. Calls
+                        verifyOtp() - no PKCE, no allowlist needed.
+       2. code        - PKCE code (when redirect URL is allowlisted).
+                        Calls exchangeCodeForSession().
+       3. access_token in hash - Implicit/legacy flow fallback.
+  ---------------------------------------------------------- */
+  var usernameEl  = document.getElementById('display-username');
+  var emailEl     = document.getElementById('display-email');
+  var welcomeEl   = document.getElementById('display-welcome');
+
+  if (usernameEl && emailEl) {
+    var loadingEl  = document.getElementById('confirm-loading');
+    var errorEl    = document.getElementById('confirm-error');
+    var errorMsgEl = document.getElementById('confirm-error-msg');
+    var successEl  = document.getElementById('confirm-success');
+    var iconWrapEl = document.getElementById('confirm-icon-wrap');
+
+    var SUPABASE_URL  = 'https://dilhsyykvfxdieswqolm.supabase.co';
+    var SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpbGhzeXlrdmZ4ZGllc3dxb2xtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1MzM2NjgsImV4cCI6MjA4NjEwOTY2OH0.4E04DDIgkvEJm7Ff2OlqYNTS64NVIC6RvBhtOfYyMtQ';
+
+    function sanitise(str) {
+      if (!str) return null;
+      var tmp = document.createElement('div');
+      tmp.appendChild(document.createTextNode(String(str)));
+      return tmp.innerHTML;
+    }
+    function decodeJwtPayload(token) {
+      try {
+        var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        var json = decodeURIComponent(atob(base64).split('').map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(json);
+      } catch (e) { return null; }
+    }
+    function showSuccess(username, email) {
+      if (loadingEl)  loadingEl.style.display  = 'none';
+      if (errorEl)    errorEl.style.display    = 'none';
+      if (successEl)  successEl.style.display  = 'block';
+      if (iconWrapEl) iconWrapEl.style.display = 'flex';
+      var name = sanitise(username) || 'User';
+      var mail = sanitise(email)    || '\u2014';
+      usernameEl.textContent = name;
+      emailEl.textContent    = mail;
+      if (welcomeEl) welcomeEl.textContent = 'Welcome, ' + name + '! \uD83C\uDF89';
+    }
+    function showSoftSuccess() {
+      if (loadingEl)  loadingEl.style.display  = 'none';
+      if (errorEl)    errorEl.style.display    = 'none';
+      if (successEl)  successEl.style.display  = 'block';
+      if (iconWrapEl) iconWrapEl.style.display = 'flex';
+      var detailsEl = document.querySelector('.confirm-details');
+      if (detailsEl) detailsEl.style.display = 'none';
+      if (welcomeEl) welcomeEl.textContent = '';
+      var msgEl = document.querySelector('.confirm-message');
+      if (msgEl) msgEl.textContent = 'Your email has been confirmed. Open the Funnecta app and log in to continue.';
+    }
+    function showError(msg) {
+      if (loadingEl)  loadingEl.style.display  = 'none';
+      if (successEl)  successEl.style.display  = 'none';
+      if (iconWrapEl) iconWrapEl.style.display = 'none';
+      if (errorEl)    errorEl.style.display    = 'block';
+      if (errorMsgEl) errorMsgEl.textContent   = msg || 'This confirmation link has expired or is invalid.';
+    }
+    function getSupabaseClient() {
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY,
+        { auth: { persistSession: false, detectSessionInUrl: false } }
+      );
+    }
+    function extractUser(result) {
+      var user = (result.data && (result.data.user || (result.data.session && result.data.session.user)));
+      return user || null;
+    }
+    var params    = new URLSearchParams(window.location.search);
+    var tokenHash = params.get('token_hash');
+    var type      = params.get('type') || 'signup';
+    var code      = params.get('code');
+    if (!window.supabase) {
+      setTimeout(function () { window.location.reload(); }, 2000);
+    } else if (tokenHash) {
+      getSupabaseClient().auth.verifyOtp({ token_hash: tokenHash, type: type })
+        .then(function (result) {
+          if (result.error) {
+            showError('Verification failed: ' + result.error.message + '. The link may have expired \u2014 please sign up again.');
+          } else {
+            var user = extractUser(result);
+            if (user) {
+              showSuccess((user.user_metadata && user.user_metadata.username) || user.email.split('@')[0], user.email || '\u2014');
+            } else { showSoftSuccess(); }
+          }
+        })
+        .catch(function () { showError('Network error. Please check your connection and try again.'); });
+    } else if (code) {
+      getSupabaseClient().auth.exchangeCodeForSession(code)
+        .then(function (result) {
+          if (result.error) { showSoftSuccess(); }
+          else {
+            var user = extractUser(result);
+            if (user) showSuccess((user.user_metadata && user.user_metadata.username) || user.email.split('@')[0], user.email || '\u2014');
+            else showSoftSuccess();
+          }
+        })
+        .catch(function () { showSoftSuccess(); });
+    } else {
+      var hashParams  = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      var accessToken = hashParams.get('access_token');
+      if (accessToken) {
+        var payload  = decodeJwtPayload(accessToken);
+        var payEmail = (payload && payload.email) || '\u2014';
+        var payUser  = (payload && payload.user_metadata && payload.user_metadata.username) || (payEmail !== '\u2014' ? payEmail.split('@')[0] : 'User');
+        showSuccess(payUser, payEmail);
+      } else { showSoftSuccess(); }
+    }
+  }
+
+  /* ── Open App Deep Link ── */
+  window.openApp = function () {
+    var fallbackEl = document.getElementById('app-fallback');
+    window.location.href = 'funnecta://auth-callback';
+    setTimeout(function () {
+      if (fallbackEl) { fallbackEl.style.display = 'block'; }
+    }, 2000);
+  };
+
+})();
+`;
+
+// Write CSS
+fs.writeFileSync(path.join(base, 'css', 'styles.css'), css, 'utf8');
+console.log('✓ css/styles.css written (' + css.split('\n').length + ' lines)');
+
+// Write JS
+fs.writeFileSync(path.join(base, 'js', 'script.js'), js, 'utf8');
+console.log('✓ js/script.js written (' + js.split('\n').length + ' lines)');
