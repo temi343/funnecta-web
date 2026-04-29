@@ -159,8 +159,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-proof { display: flex; align-items: center; gap: 14px; }
 .proof-avatars { display: flex; align-items: center; }
 .avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 2px solid var(--white); object-fit: cover;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 2.5px solid var(--white); object-fit: cover;
   margin-left: -10px; transition: transform .2s;
 }
 .avatar:first-child { margin-left: 0; }
