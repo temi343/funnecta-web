@@ -178,25 +178,78 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border-radius: 50%;
   z-index: 0;
 }
-.mockup {
-  position: absolute; object-fit: contain;
-  filter: drop-shadow(0 24px 48px rgba(0,0,0,.18));
-  border-radius: 28px;
+/* ── Coded Phone Mockups ── */
+.phone-mockup {
+  position: absolute;
+  border-radius: 32px;
+  border: 3px solid #1a1a1a;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+}
+.phone-primary {
+  width: 200px; height: 422px;
+  top: 10px; left: 50%;
+  transform: translateX(-90%) rotate(-5deg);
   z-index: 2;
 }
-.mockup-back {
-  width: 200px;
-  top: 20px; left: 50%;
-  transform: translateX(-80%) rotate(-8deg);
-  z-index: 1;
-  opacity: .92;
+.phone-secondary {
+  width: 176px; height: 374px;
+  top: 44px; left: 50%;
+  transform: translateX(5%) rotate(4deg);
+  z-index: 1; opacity: .95;
 }
-.mockup-front {
-  width: 220px;
-  top: 40px; left: 50%;
-  transform: translateX(-20%) rotate(5deg);
-  z-index: 2;
+.phone-notch {
+  position: absolute; top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 56px; height: 13px;
+  background: #1a1a1a; border-radius: 7px; z-index: 20;
 }
+.phone-screen { width: 100%; height: 100%; overflow: hidden; background: #fff; }
+
+/* Phone home screen */
+.pm-home { padding: 30px 10px 6px; height: 100%; overflow: hidden; font-family: var(--font); }
+.pm-home-hd { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 7px; }
+.pm-greeting { font-size: 7px; color: #888; }
+.pm-uname { font-size: 10.5px; font-weight: 800; color: #111; }
+.pm-ava-sm { width: 24px; height: 24px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1.5px solid #eee; }
+.pm-ava-sm img { width: 100%; height: 100%; object-fit: cover; }
+.pm-search { background: #f5f5f5; border-radius: 7px; padding: 5px 8px; font-size: 6.5px; color: #aaa; margin-bottom: 7px; display: flex; align-items: center; gap: 4px; }
+.pm-tabs { display: flex; border-bottom: 1.5px solid #f0f0f0; margin-bottom: 7px; }
+.pm-tab { flex: 1; text-align: center; padding: 3px 0; font-size: 6.5px; color: #aaa; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.pm-tab-active { color: var(--orange); border-bottom: 2px solid var(--orange); margin-bottom: -1.5px; }
+.pm-sec-hd { display: flex; justify-content: space-between; align-items: center; font-size: 7px; font-weight: 700; color: #111; margin-bottom: 5px; }
+.pm-see-all { color: var(--orange); font-weight: 500; }
+.pm-comm-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid #f5f5f5; }
+.pm-comm-ico { width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0; color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.pm-comm-info { flex: 1; min-width: 0; }
+.pm-comm-name { font-size: 7px; font-weight: 700; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-comm-meta { font-size: 6px; color: #aaa; }
+.pm-join { font-size: 6px; font-weight: 700; color: var(--orange); border: 1px solid var(--orange); border-radius: 4px; padding: 2px 5px; flex-shrink: 0; }
+.pm-conn-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+.pm-conn-ava { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #F05A1A, #ff8547); flex-shrink: 0; }
+.pm-conn-name { font-size: 7px; font-weight: 700; color: #111; }
+.pm-conn-role { font-size: 6px; color: #aaa; }
+
+/* Phone chat screen */
+.pm-chat { display: flex; flex-direction: column; height: 100%; padding-top: 28px; font-family: var(--font); }
+.pm-chat-hd { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; color: #111; }
+.pm-chat-info { flex: 1; }
+.pm-chat-name { font-size: 8px; font-weight: 700; color: #111; }
+.pm-chat-online { font-size: 6px; color: #22c55e; font-weight: 500; }
+.pm-chat-acts { display: flex; align-items: center; gap: 4px; color: #666; }
+.pm-msgs { flex: 1; overflow: hidden; padding: 7px 8px; display: flex; flex-direction: column; gap: 6px; }
+.pm-msg-in { align-self: flex-start; max-width: 80%; }
+.pm-msg-out { align-self: flex-end; max-width: 80%; }
+.pm-bubble { padding: 5px 8px; border-radius: 8px; font-size: 6.5px; line-height: 1.4; }
+.pm-bubble-in { background: #f1f1f1; color: #111; border-bottom-left-radius: 2px; }
+.pm-bubble-out { background: var(--orange); color: #fff; border-bottom-right-radius: 2px; }
+.pm-time { font-size: 5.5px; color: #bbb; margin-top: 2px; }
+.pm-msg-in .pm-time { text-align: left; }
+.pm-msg-out .pm-time { text-align: right; }
+.pm-input-bar { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border-top: 1px solid #f0f0f0; flex-shrink: 0; }
+.pm-input-fld { flex: 1; font-size: 6.5px; color: #bbb; background: #f5f5f5; border-radius: 6px; padding: 4px 7px; }
+.pm-send-btn { width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 /* Decorative circles */
 .hero-circle { position: absolute; border-radius: 50%; pointer-events: none; }
 .c1 { width: 540px; height: 540px; top: -180px; right: -120px; background: radial-gradient(circle, rgba(240,90,26,.07) 0%, transparent 70%); }
@@ -407,9 +460,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .hamburger { display: flex; }
   .hero-inner { grid-template-columns: 1fr; gap: 48px; }
   .hero { padding-top: calc(var(--nav-h) + 40px); min-height: unset; }
-  .hero-mockups { min-height: 320px; }
-  .mockup-back  { width: 150px; }
-  .mockup-front { width: 165px; }
+  .hero-mockups { min-height: 300px; }
+  .phone-primary   { width: 156px; height: 330px; transform: translateX(-90%) rotate(-5deg); }
+  .phone-secondary { width: 138px; height: 292px; transform: translateX(5%) rotate(4deg); }
   .features-grid { grid-template-columns: 1fr 1fr; }
   .about-inner { grid-template-columns: 1fr; gap: 40px; }
   .about-stats { grid-template-columns: 1fr 1fr; }
