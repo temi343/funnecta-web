@@ -81,37 +81,70 @@
         <div class="phone-mockup phone-primary">
           <div class="phone-notch"></div>
           <div class="phone-screen">
-            <div class="pm-home">
-              <div class="pm-home-hd">
-                <div><div class="pm-greeting">Good morning,</div><div class="pm-uname">Alex! &#128293;</div></div>
-                <div class="pm-ava-sm"><img src="assets/images/profile.png" alt=""></div>
+            <div class="pm-feed">
+              <!-- status bar -->
+              <div class="pm-status-bar">
+                <span class="pm-sb-time">9:41</span>
+                <div class="pm-sb-icons">
+                  <svg viewBox="0 0 20 14" width="10" height="7"><rect x="0" y="7" width="3" height="7" rx="1" fill="#111"/><rect x="4.5" y="5" width="3" height="9" rx="1" fill="#111"/><rect x="9" y="3" width="3" height="11" rx="1" fill="#111"/><rect x="13.5" y="0" width="3" height="14" rx="1" fill="#111"/></svg>
+                  <svg viewBox="0 0 20 14" width="10" height="7"><path d="M10 1C5.5 1 1.6 3.2 0 6.5l2 1.8C3.4 5.8 6.5 4 10 4s6.6 1.8 8 4.3l2-1.8C18.4 3.2 14.5 1 10 1z" fill="#111"/><path d="M10 5.5c-2.4 0-4.5 1.1-5.8 2.8l2 1.7C7 8.9 8.4 8.2 10 8.2s3 .7 3.8 1.8l2-1.7C14.5 6.6 12.4 5.5 10 5.5z" fill="#111"/><circle cx="10" cy="13" r="1.5" fill="#111"/></svg>
+                  <svg viewBox="0 0 25 12" width="15" height="8"><rect x="0" y="1" width="21" height="10" rx="2.5" fill="none" stroke="#111" stroke-width="1.2"/><rect x="1.5" y="2.5" width="15" height="7" rx="1.5" fill="#111"/><rect x="22" y="3.5" width="2.5" height="5" rx="1.5" fill="#111"/></svg>
+                </div>
               </div>
-              <div class="pm-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="9" height="9"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Search people or topics</div>
-              <div class="pm-tabs">
-                <div class="pm-tab pm-tab-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Connect</span></div>
-                <div class="pm-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chats</span></div>
-                <div class="pm-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Groups</span></div>
+              <!-- feed tabs -->
+              <div class="pm-feed-tabs">
+                <div class="pft pft-active">Posts</div>
+                <div class="pft">Friends (3)</div>
+                <svg class="pft-bell" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" width="10" height="10"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
               </div>
-              <div class="pm-sec-hd"><span>Suggested for you</span><span class="pm-see-all">See all</span></div>
-              <div class="pm-comm-item">
-                <div class="pm-comm-ico" style="background:#e74c3c">D</div>
-                <div class="pm-comm-info"><div class="pm-comm-name">Design Creatives</div><div class="pm-comm-meta">Community &middot; 1.2k members</div></div>
-                <div class="pm-join">Join</div>
+              <!-- search -->
+              <div class="pm-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" width="8" height="8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Search Funnecta...
               </div>
-              <div class="pm-comm-item">
-                <div class="pm-comm-ico" style="background:#1abc9c">T</div>
-                <div class="pm-comm-info"><div class="pm-comm-name">Tech Innovators</div><div class="pm-comm-meta">Community &middot; 980 members</div></div>
-                <div class="pm-join">Join</div>
+              <!-- Post: Jessica -->
+              <div class="pm-post">
+                <div class="pm-post-hd">
+                  <div class="pm-post-ava" style="background:#e07b5a">J</div>
+                  <div class="pm-post-meta"><div class="pm-post-name">Jessica</div><div class="pm-post-time">10 ago</div></div>
+                  <span class="pm-post-more">&#8943;</span>
+                </div>
+                <div class="pm-post-body">Just put together a guitar... Anyone down for a mini jam session this weekend? &#127928;</div>
+                <div class="pm-post-stats">271 likes &middot; 24 comments</div>
+                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
               </div>
-              <div class="pm-comm-item">
-                <div class="pm-comm-ico" style="background:#9b59b6">S</div>
-                <div class="pm-comm-info"><div class="pm-comm-name">Startup Founders</div><div class="pm-comm-meta">Community &middot; 1.4k members</div></div>
-                <div class="pm-join">Join</div>
+              <!-- Post: Alex -->
+              <div class="pm-post">
+                <div class="pm-post-hd">
+                  <div class="pm-post-ava" style="background:#5a8fe0">A</div>
+                  <div class="pm-post-meta"><div class="pm-post-name">Alex</div><div class="pm-post-time">2h ago</div></div>
+                  <span class="pm-post-more">&#8943;</span>
+                </div>
+                <div class="pm-post-body">Exploring new coffee shops in the city. Drop your favorite spots below! &#9749;</div>
+                <div class="pm-post-stats">154 likes &middot; 12 comments</div>
+                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
               </div>
-              <div class="pm-sec-hd" style="margin-top:7px"><span>Recent Connections</span><span class="pm-see-all">See all</span></div>
-              <div class="pm-conn-item">
-                <div class="pm-conn-ava"></div>
-                <div><div class="pm-conn-name">Sophia Carter</div><div class="pm-conn-role">UI/UX Designer</div></div>
+              <!-- Post: Mina -->
+              <div class="pm-post">
+                <div class="pm-post-hd">
+                  <div class="pm-post-ava" style="background:#5ac47e">M</div>
+                  <div class="pm-post-meta"><div class="pm-post-name">Mina</div><div class="pm-post-time">5h ago</div></div>
+                  <span class="pm-post-more">&#8943;</span>
+                </div>
+                <div class="pm-post-body">Just ran my first 5K this morning. Small steps, big progress. &#127939;</div>
+                <div class="pm-post-stats">311 likes &middot; 31 comments</div>
+                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
+              </div>
+              <!-- Post: Taylor -->
+              <div class="pm-post">
+                <div class="pm-post-hd">
+                  <div class="pm-post-ava" style="background:#a05ae0">T</div>
+                  <div class="pm-post-meta"><div class="pm-post-name">Taylor</div><div class="pm-post-time">1d ago</div></div>
+                  <span class="pm-post-more">&#8943;</span>
+                </div>
+                <div class="pm-post-body">Photography walk downtown today. Caught some beautiful light. &#128247;</div>
+                <div class="pm-post-stats">98 likes &middot; 5 comments</div>
+                <div class="pm-post-acts"><span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8599; Share</span><span>&#128278; Save</span></div>
               </div>
             </div>
           </div>
