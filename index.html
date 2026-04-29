@@ -3,226 +3,543 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Funnecta – Turn Hobbies Into Real Connections</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <title>Funnecta – Connect Smarter. Grow Faster.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
 
-  <!-- ========== NAVBAR ========== -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <span class="logo-icon">F</span>
-        <span class="logo-text">Funnecta</span>
-      </a>
-      <div class="nav-links">
-        <a href="#how-it-works">How It Works</a>
-        <a href="#problem-solution">Why Funnecta</a>
-        <a href="App-apk%20file/app-release.apk" download class="nav-cta">Download App</a>
-      </div>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+<!-- ══════════════════════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+
+    <a href="#hero" class="nav-logo">
+      <img src="assets/images/app_icon.png" alt="Funnecta" class="logo-img" />
+      <span class="logo-text">funnecta</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#hero"     class="nav-link active">Home</a></li>
+      <li><a href="#features" class="nav-link">Features</a></li>
+      <li><a href="#about"    class="nav-link">About</a></li>
+      <li><a href="#faq"      class="nav-link">FAQ</a></li>
+      <li><a href="#contact"  class="nav-link">Contact</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <a href="App-apk%20file/app-release.apk" download class="btn-nav-cta">Download App</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
     </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#how-it-works" class="mobile-link">How It Works</a>
-      <a href="#problem-solution" class="mobile-link">Why Funnecta</a>
-      <a href="App-apk%20file/app-release.apk" download class="mobile-link mobile-cta">Download App</a>
-    </div>
-  </nav>
+  </div>
 
-  <!-- ========== HERO SECTION ========== -->
-  <section class="hero" id="hero">
-    <div class="hero-inner">
-      <!-- Left Content -->
-      <div class="hero-content">
-        <div class="hero-badge animate-fade-up">🎉 Now available on Android</div>
-        <h1 class="hero-headline animate-fade-up delay-1">
-          Turn hobbies into<br />
-          <span class="gradient-text">real connections.</span>
-        </h1>
-        <p class="hero-subtext animate-fade-up delay-2">
-          Meet new people through shared interests, not swipes.
-          Funnecta matches you with real people who love what you love.
-        </p>
-        <div class="hero-actions animate-fade-up delay-3">
-          <a href="App-apk%20file/app-release.apk" download class="btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download Now
-          </a>
-          <a href="#how-it-works" class="btn-ghost">See How It Works</a>
-        </div>
-        <div class="hero-stats animate-fade-up delay-4">
-          <div class="stat">
-            <span class="stat-num">10K+</span>
-            <span class="stat-label">Active Users</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-num">50+</span>
-            <span class="stat-label">Interests</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-num">4.8★</span>
-            <span class="stat-label">Rating</span>
-          </div>
-        </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#hero"     class="mobile-link">Home</a>
+    <a href="#features" class="mobile-link">Features</a>
+    <a href="#about"    class="mobile-link">About</a>
+    <a href="#faq"      class="mobile-link">FAQ</a>
+    <a href="#contact"  class="mobile-link">Contact</a>
+    <a href="App-apk%20file/app-release.apk" download class="mobile-link mobile-cta">Download App</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+
+    <!-- ── LEFT: text ── -->
+    <div class="hero-content">
+      <div class="hero-badge hero-anim" data-delay="0">
+        Connect. Share. Grow.
       </div>
 
-      <!-- Right Illustration -->
-      <div class="hero-illustration animate-float">
-        <!-- Organic warm blob background -->
-        <div class="hero-blob"></div>
-        <!-- Concentric arc decoration top-right -->
-        <div class="hero-arcs"></div>
-        <img
-          src="assets/images/oDimZ .png"
-          alt="Friends connecting through shared hobbies"
-          class="hero-img-illus"
-        />
-        <!-- Floating hobby bubbles — above the illustration -->
-        <div class="float-bubble bubble-1">❤️</div>
-        <div class="float-bubble bubble-2">🎵</div>
-        <div class="float-bubble bubble-3">🎮</div>
-        <div class="float-bubble bubble-4">💬</div>
-        <div class="float-bubble bubble-5">🎨</div>
-      </div>
-    </div>
+      <h1 class="hero-heading hero-anim" data-delay="0.15">
+        Connect <span class="text-orange">Smarter.</span><br>
+        Grow <span class="text-orange">Faster.</span>
+      </h1>
 
-    <!-- Background decorations -->
-    <div class="hero-bg-circle circle-1"></div>
-    <div class="hero-bg-circle circle-2"></div>
-    <div class="hero-bg-circle circle-3"></div>
-  </section>
+      <p class="hero-subtext hero-anim" data-delay="0.3">
+        Funnecta helps you build meaningful connections,<br class="br-desktop">
+        share ideas, and grow together in one smart platform.
+      </p>
 
-  <!-- ========== HOW IT WORKS ========== -->
-  <section class="how-it-works" id="how-it-works">
-    <div class="section-inner">
-      <div class="section-header">
-        <span class="section-tag reveal">Simple Steps</span>
-        <h2 class="section-title reveal">How It Works</h2>
-        <p class="section-subtitle reveal">Three simple steps to start making genuine connections today.</p>
-      </div>
-      <div class="cards-grid">
-        <!-- Card 1 -->
-        <div class="feature-card reveal-card" data-delay="0">
-          <div class="card-icon-wrap orange">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <div class="hero-buttons hero-anim" data-delay="0.45">
+        <!-- App Store → iOS coming soon toast -->
+        <button type="button" onclick="showIosComingSoon()" class="store-btn">
+          <svg class="store-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          <div class="store-text">
+            <span class="store-label">Download on the</span>
+            <span class="store-name">App Store</span>
           </div>
-          <div class="card-step">01</div>
-          <h3 class="card-title">Choose Your Interests</h3>
-          <p class="card-desc">Select from 50+ categories — gaming, music, sports, art and more. Tell Funnecta what drives your passion.</p>
-        </div>
-        <!-- Card 2 -->
-        <div class="feature-card reveal-card featured" data-delay="150">
-          <div class="card-icon-wrap white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div class="card-step">02</div>
-          <h3 class="card-title">Get Matched Instantly</h3>
-          <p class="card-desc">Our smart algorithm finds people who share your exact interests — not just proximity or looks.</p>
-          <div class="card-badge">Most Popular</div>
-        </div>
-        <!-- Card 3 -->
-        <div class="feature-card reveal-card" data-delay="300">
-          <div class="card-icon-wrap orange">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <div class="card-step">03</div>
-          <h3 class="card-title">Chat, Play & Connect</h3>
-          <p class="card-desc">Jump into conversations, join hobby groups, and build friendships that go beyond the screen.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+        </button>
 
-  <!-- ========== PROBLEM VS SOLUTION ========== -->
-  <section class="problem-solution" id="problem-solution">
-    <div class="section-inner">
-      <div class="section-header">
-        <span class="section-tag reveal">The Real Difference</span>
-        <h2 class="section-title reveal">Why Funnecta?</h2>
-        <p class="section-subtitle reveal">We built what social apps never did — genuine, interest-driven connections.</p>
-      </div>
-      <div class="ps-grid">
-        <!-- Problem Card -->
-        <div class="ps-card problem-card slide-left">
-          <div class="ps-card-content">
-            <div class="ps-card-header">
-              <span class="ps-label problem-label">THE PROBLEM</span>
-            </div>
-            <h3 class="ps-headline">Social apps feel fake.</h3>
-            <ul class="ps-list">
-              <li><span class="ps-icon-bullet problem-bullet">✗</span> Swiping is exhausting</li>
-              <li><span class="ps-icon-bullet problem-bullet">✗</span> Hard to find genuine connections</li>
-              <li><span class="ps-icon-bullet problem-bullet">✗</span> Conversations often lead nowhere</li>
-              <li><span class="ps-icon-bullet problem-bullet">✗</span> Meeting in person feels intimidating</li>
-              <li><span class="ps-icon-bullet problem-bullet">✗</span> People's profiles are misleading</li>
-            </ul>
+        <!-- Google Play → Android APK -->
+        <a href="App-apk%20file/app-release.apk" download class="store-btn">
+          <svg class="store-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.18 23.76c.3.17.64.22.99.14l12.12-6.98-2.56-2.56-10.55 9.4zm-1.8-19.69c-.08.24-.13.5-.13.78v18.3c0 .28.05.54.13.78l.07.07 10.24-10.24v-.24L1.45 4zm20.46 8.27-2.93-1.69-2.84 2.84 2.84 2.84 2.95-1.7c.84-.49.84-1.28-.02-1.29zM4.17.14 16.29 7.12l-2.56 2.56L3.18.28C3.47.2 3.81.25 4.17.56V.14z"/>
+          </svg>
+          <div class="store-text">
+            <span class="store-label">GET IT ON</span>
+            <span class="store-name">Google Play</span>
           </div>
-          <img src="assets/images/sANe6.png" alt="" class="ps-card-illus" aria-hidden="true" />
-        </div>
-
-        <!-- Solution Card -->
-        <div class="ps-card solution-card slide-right">
-          <div class="ps-card-content">
-            <div class="ps-card-header">
-              <span class="ps-label solution-label">OUR SOLUTION</span>
-            </div>
-            <h3 class="ps-headline">Built for real connections.</h3>
-            <ul class="ps-list">
-              <li><span class="ps-icon-bullet solution-bullet">✓</span> Discovery based on interests</li>
-              <li><span class="ps-icon-bullet solution-bullet">✓</span> Mini games to break the ice</li>
-              <li><span class="ps-icon-bullet solution-bullet">✓</span> Instant chat, real connections</li>
-              <li><span class="ps-icon-bullet solution-bullet">✓</span> Hobby rooms to connect, share and build communities</li>
-            </ul>
-          </div>
-          <img src="assets/images/mpBXo.png" alt="" class="ps-card-illus" aria-hidden="true" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== CTA BANNER ========== -->
-  <section class="cta-banner reveal-section">
-    <div class="cta-inner">
-      <h2 class="cta-title">Ready to find your people?</h2>
-      <p class="cta-sub">Download Funnecta free — available on Android now.</p>
-      <a href="App-apk%20file/app-release.apk" download class="btn-primary btn-large">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Free APK
-      </a>
-    </div>
-    <div class="cta-bg-circle cta-c1"></div>
-    <div class="cta-bg-circle cta-c2"></div>
-  </section>
-
-  <!-- ========== FOOTER ========== -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <a href="#" class="nav-logo">
-          <span class="logo-icon">F</span>
-          <span class="logo-text">Funnecta</span>
         </a>
-        <p>Turn hobbies into real connections.</p>
       </div>
-      <div class="footer-links">
-        <a href="#how-it-works">How It Works</a>
-        <a href="#problem-solution">Why Funnecta</a>
-        <a href="App-apk%20file/app-release.apk" download>Download</a>
-        <a href="https://github.com/temi343/funnecta-web" target="_blank" rel="noopener noreferrer">GitHub</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 Funnecta. All rights reserved.</p>
-    </div>
-  </footer>
 
-  <script src="js/script.js"></script>
-</body>
+      <div class="hero-proof hero-anim" data-delay="0.6">
+        <div class="proof-avatars">
+          <img src="assets/images/profile.png" alt="Funnecta users" class="proof-avatar-img" />
+        </div>
+        <div class="proof-stars">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="proof-text">Trusted by 10,000+ users</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: phone mockups ── -->
+    <div class="hero-phones hero-anim" data-delay="0.2">
+      <div class="phones-wrapper">
+        <div class="phones-blob"></div>
+
+        <!-- Back phone – chat screen -->
+        <div class="phone phone-back">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="screen-chat">
+                <div class="screen-header">
+                  <span class="back-icon">&#8249;</span>
+                  <div class="chat-user">
+                    <div class="chat-avatar"></div>
+                    <div>
+                      <div class="chat-name">James Miller</div>
+                      <div class="chat-status">Online</div>
+                    </div>
+                  </div>
+                  <div class="chat-actions">
+                    <span>&#128222;</span>
+                    <span>&#8942;</span>
+                  </div>
+                </div>
+                <div class="chat-messages">
+                  <div class="msg msg-in">Hey! &#128075;<div class="msg-time">11:20 AM</div></div>
+                  <div class="msg msg-out">Hi James! Great to connect with you.<div class="msg-time">11:20 AM</div></div>
+                  <div class="msg msg-in">Looking forward to collaborating!<div class="msg-time">11:21 AM</div></div>
+                  <div class="msg msg-out">Same here! Let's build something amazing.<div class="msg-time">11:22 AM</div></div>
+                </div>
+                <div class="chat-input-bar">
+                  <span class="chat-input-placeholder">Type a message...</span>
+                  <div class="send-btn">&#10148;</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Front phone – home screen -->
+        <div class="phone phone-front">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="screen-feed">
+                <div class="feed-status-bar">9:41</div>
+                <div class="feed-tabs">
+                  <span class="feed-tab feed-tab-active">Posts</span>
+                  <span class="feed-tab">Friends (3)</span>
+                  <span class="feed-bell">&#128276;</span>
+                </div>
+                <div class="feed-search">
+                  <span class="feed-search-icon">&#128269;</span>
+                  <span class="feed-search-placeholder">Search Funnecta...</span>
+                </div>
+                <div class="feed-posts">
+                  <div class="feed-post">
+                    <div class="post-header">
+                      <div class="post-avatar pa-purple"></div>
+                      <div class="post-meta">
+                        <span class="post-name">Jessica</span>
+                        <span class="post-time">1d ago</span>
+                      </div>
+                      <span class="post-more">&#8943;</span>
+                    </div>
+                    <p class="post-text">Just put together a guitar... Anyone down for a mini jam session this weekend? &#127928;</p>
+                    <div class="post-stats">271 likes &middot; 24 comments</div>
+                    <div class="post-actions">
+                      <span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8680; Share</span>
+                    </div>
+                  </div>
+                  <div class="feed-post">
+                    <div class="post-header">
+                      <div class="post-avatar pa-blue"></div>
+                      <div class="post-meta">
+                        <span class="post-name">Alex</span>
+                        <span class="post-time">2h ago</span>
+                      </div>
+                      <span class="post-more">&#8943;</span>
+                    </div>
+                    <p class="post-text">Exploring new coffee shops in the city. Drop your favorite spots below! &#9749;</p>
+                    <div class="post-stats">154 likes &middot; 12 comments</div>
+                    <div class="post-actions">
+                      <span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8680; Share</span>
+                    </div>
+                  </div>
+                  <div class="feed-post">
+                    <div class="post-header">
+                      <div class="post-avatar pa-green"></div>
+                      <div class="post-meta">
+                        <span class="post-name">Mina</span>
+                        <span class="post-time">5h ago</span>
+                      </div>
+                      <span class="post-more">&#8943;</span>
+                    </div>
+                    <p class="post-text">Just ran my first 5K this morning. Small steps, big progress. &#127939;</p>
+                    <div class="post-stats">311 likes &middot; 31 comments</div>
+                    <div class="post-actions">
+                      <span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8680; Share</span>
+                    </div>
+                  </div>
+                  <div class="feed-post">
+                    <div class="post-header">
+                      <div class="post-avatar pa-orange"></div>
+                      <div class="post-meta">
+                        <span class="post-name">Taylor</span>
+                        <span class="post-time">1d ago</span>
+                      </div>
+                      <span class="post-more">&#8943;</span>
+                    </div>
+                    <p class="post-text">Photography walk downtown today. Caught some beautiful light. &#128248;</p>
+                    <div class="post-stats">99 likes &middot; 5 comments</div>
+                    <div class="post-actions">
+                      <span>&#128077; Like</span><span>&#128172; Comment</span><span>&#10084; Love</span><span>&#8680; Share</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FEATURES
+══════════════════════════════════════════════════════════ -->
+<section class="features" id="features">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">FEATURES</div>
+      <h2 class="section-title">Everything you need to <span class="text-orange">connect</span></h2>
+    </div>
+
+    <div class="features-grid">
+
+      <div class="feature-card reveal-el">
+        <div class="feat-icon-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+            <rect width="52" height="52" rx="14" fill="#FFF3E8"/>
+            <path d="M26 16c-3 0-5.5 2.5-5.5 5.5S23 27 26 27s5.5-2.5 5.5-5.5S29 16 26 16zm-9.5 17c0-3.5 6.5-5.25 9.5-5.25s9.5 1.75 9.5 5.25V35h-19v-2z" fill="#F05A1A"/>
+            <circle cx="37" cy="19" r="3" fill="#F05A1A" opacity=".5"/>
+            <circle cx="15" cy="19" r="3" fill="#F05A1A" opacity=".5"/>
+            <path d="M41 32v-1c0-1.8-2.5-3-5.5-3.8M11 32v-1c0-1.8 2.5-3 5.5-3.8" stroke="#F05A1A" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+          </svg>
+        </div>
+        <h3 class="feat-title">Smart Connections</h3>
+        <p class="feat-desc">Find and connect with like-minded people based on your interests.</p>
+      </div>
+
+      <div class="feature-card reveal-el" style="--delay:.12s">
+        <div class="feat-icon-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+            <rect width="52" height="52" rx="14" fill="#FFF3E8"/>
+            <path d="M26 13c-7.18 0-13 4.85-13 10.83 0 3.03 1.46 5.77 3.79 7.75L15 37l4.87-2.17c1.85.7 3.84 1.09 5.95 1.09 7.18 0 13-4.85 13-10.83S33.18 13 26 13z" fill="#F05A1A"/>
+            <path d="M20 25h12M20 21h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="feat-title">Real-time Chat</h3>
+        <p class="feat-desc">Chat instantly and build stronger relationships in real-time.</p>
+      </div>
+
+      <div class="feature-card reveal-el" style="--delay:.24s">
+        <div class="feat-icon-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+            <rect width="52" height="52" rx="14" fill="#FFF3E8"/>
+            <circle cx="26" cy="21" r="5.5" fill="#F05A1A"/>
+            <circle cx="15" cy="23" r="4" fill="#F05A1A" opacity=".5"/>
+            <circle cx="37" cy="23" r="4" fill="#F05A1A" opacity=".5"/>
+            <path d="M9 36c0-3.5 2.7-5 6-5 1 0 2 .22 2.8.6M43 36c0-3.5-2.7-5-6-5-1 0-2 .22-2.8.6M19 36c0-4.2 3.13-6.5 7-6.5s7 2.3 7 6.5" stroke="#F05A1A" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="feat-title">Communities</h3>
+        <p class="feat-desc">Discover and join communities built around what you love.</p>
+      </div>
+
+      <div class="feature-card reveal-el" style="--delay:.36s">
+        <div class="feat-icon-wrap">
+          <img src="assets/images/trivia icon.png" alt="Trivia Games" class="feat-icon-img" />
+        </div>
+        <h3 class="feat-title">Trivia Games</h3>
+        <p class="feat-desc">Engage with friends in fun trivia challenges across various topics.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════════════════════ -->
+<section class="about" id="about">
+  <div class="about-bg-wrap">
+    <img src="assets/images/web.png" alt="" class="about-bg-img" aria-hidden="true" />
+    <div class="about-bg-overlay"></div>
+  </div>
+  <div class="section-inner">
+    <div class="about-inner">
+
+      <!-- Left -->
+      <div class="about-text slide-left">
+        <div class="section-tag">ABOUT US</div>
+        <h2 class="section-title about-heading">
+          Building meaningful<br>connections <span class="text-orange">for everyone.</span>
+        </h2>
+        <p class="about-desc">
+          Funnecta is more than just an app &ndash; it&rsquo;s a community where people come together
+          to connect, collaborate, and create opportunities.
+        </p>
+        <div class="about-stats">
+          <div class="stat-item">
+            <div class="stat-icon">&#128101;</div>
+            <div>
+              <div class="stat-value">10K+</div>
+              <div class="stat-label">Active Users</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">&#127968;</div>
+            <div>
+              <div class="stat-value">500+</div>
+              <div class="stat-label">Communities</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">&#127758;</div>
+            <div>
+              <div class="stat-value">50+</div>
+              <div class="stat-label">Countries</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">&#128172;</div>
+            <div>
+              <div class="stat-value">100K+</div>
+              <div class="stat-label">Messages Sent</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-badge">
+          <img src="assets/images/app_icon.png" alt="Funnecta" style="width:38px;height:38px;border-radius:9px;flex-shrink:0" />
+          <span>Join Funnecta today and be part of something amazing.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FAQ
+══════════════════════════════════════════════════════════ -->
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">FAQ</div>
+      <h2 class="section-title">Frequently asked <span class="text-orange">questions</span></h2>
+    </div>
+
+    <div class="faq-grid">
+
+      <div class="faq-col">
+        <div class="faq-item reveal-el">
+          <button class="faq-question">
+            What is Funnecta?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Funnecta is a social platform designed to help people build meaningful connections, join communities based on shared interests, and communicate in real-time.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal-el">
+          <button class="faq-question">
+            How do I create an account?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Download the Funnecta app, tap &ldquo;Sign Up,&rdquo; enter your details, verify your email or phone number, and you&rsquo;re ready to start connecting!</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal-el">
+          <button class="faq-question">
+            Is Funnecta free to use?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! Funnecta is completely free to download and use. We offer optional premium features for power users who want enhanced capabilities.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-col">
+        <div class="faq-item reveal-el">
+          <button class="faq-question">
+            How can I join a community?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Browse the Communities tab, find a group that matches your interests, and tap &ldquo;Join.&rdquo; You can also search by topic or get recommendations based on your profile.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal-el">
+          <button class="faq-question">
+            Can I message people on Funnecta?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely! You can send direct messages to any connected user. Group chats are also available within community spaces.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal-el">
+          <button class="faq-question">
+            How do I contact support?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Visit our Help Center in the app settings, or email us at support@funnecta.com. Our team responds within 24 hours on business days.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+<footer class="footer" id="contact">
+  <div class="footer-inner">
+
+    <!-- Brand -->
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo footer-logo">
+        <img src="assets/images/app_icon.png" alt="Funnecta" class="logo-img" />
+        <span class="logo-text">funnecta</span>
+      </a>
+      <p class="footer-tagline">Connect. Share. Grow. Together.</p>
+      <div class="social-icons">
+        <a href="#" class="social-link" aria-label="Facebook">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-link" aria-label="Twitter">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="https://github.com/temi343/funnecta-web" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-col">
+      <h4 class="footer-col-title">Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Resources -->
+    <div class="footer-col">
+      <h4 class="footer-col-title">Resources</h4>
+      <ul class="footer-links">
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Community Guidelines</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="footer-newsletter">
+      <h4 class="footer-col-title">Stay Updated</h4>
+      <p class="footer-newsletter-text">Subscribe to our newsletter for updates and new features.</p>
+      <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+        <input type="email" class="newsletter-input" placeholder="Enter your email" required />
+        <button type="submit" class="newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    &copy; 2026 Funnecta. All rights reserved.
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+
+<!-- iOS coming-soon toast -->
+<div id="ios-toast" style="
+  display:none;
+  position:fixed;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#1c1c1e;
+  color:#fff;
+  padding:14px 24px;
+  border-radius:12px;
+  font-size:14px;
+  font-family:Inter,sans-serif;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  z-index:9999;
+  text-align:center;
+  max-width:320px;
+  line-height:1.5;
+">
+  <strong style="color:#D4841E;">iOS App Store</strong> version coming soon!<br>
+  <span style="font-size:12px;color:#aaa;">Stay tuned &mdash; we&rsquo;ll notify you on launch.</span>
+</div>
 </html>

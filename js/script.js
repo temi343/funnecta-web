@@ -1,18 +1,13 @@
-/* ============================================================
+﻿/* ============================================================
    FUNNECTA – script.js
-   Handles: navbar scroll, mobile menu, scroll animations,
-            Intersection Observer reveals, confirm page params
    ============================================================ */
-
 (function () {
   'use strict';
 
-  /* ----------------------------------------------------------
-     NAVBAR: scroll shadow + mobile menu toggle
-  ---------------------------------------------------------- */
-  const navbar    = document.getElementById('navbar');
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
+  /* ── Navbar scroll shadow ── */
+  var navbar    = document.getElementById('navbar');
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
 
   if (navbar) {
     window.addEventListener('scroll', function () {
@@ -20,91 +15,130 @@
     }, { passive: true });
   }
 
+  /* ── Hamburger / mobile menu ── */
   if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', function () {
-      const isOpen = mobileMenu.classList.toggle('open');
-      hamburger.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      var open = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
-
-    // Close mobile menu when a link inside it is clicked
     mobileMenu.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', function () {
         mobileMenu.classList.remove('open');
         hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
       });
     });
-
-    // Close mobile menu on outside click
     document.addEventListener('click', function (e) {
       if (!navbar.contains(e.target)) {
         mobileMenu.classList.remove('open');
         hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
       }
     });
   }
 
-  /* ----------------------------------------------------------
-     INTERSECTION OBSERVER: scroll-triggered reveals
-  ---------------------------------------------------------- */
-  const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -40px 0px'
-  };
+  /* ── Active nav link via IntersectionObserver ── */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = document.querySelectorAll('section[id]');
+  if (sections.length && navLinks.length) {
+    var navObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function (a) {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    sections.forEach(function (s) { navObs.observe(s); });
+  }
 
-  const revealObserver = new IntersectionObserver(function (entries) {
+  /* ── Hero stagger animations ── */
+  document.querySelectorAll('.hero-anim').forEach(function (el) {
+    var delay = parseFloat(el.dataset.delay || 0) * 1000;
+    setTimeout(function () { el.classList.add('animated'); }, delay);
+  });
+
+  /* ── Scroll reveal (reveal-el, slide-left, slide-right) ── */
+  var revOpts = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
+  var revObs = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
-        const el = entry.target;
-        const delay = el.dataset.delay ? parseInt(el.dataset.delay, 10) : 0;
-
-        if (delay > 0) {
-          setTimeout(function () { el.classList.add('visible'); }, delay);
-        } else {
-          el.classList.add('visible');
-        }
-
-        revealObserver.unobserve(el); // Animate once
+        entry.target.classList.add('visible');
+        revObs.unobserve(entry.target);
       }
     });
-  }, observerOptions);
+  }, revOpts);
+  document.querySelectorAll('.reveal-el, .slide-left, .slide-right').forEach(function (el) {
+    revObs.observe(el);
+  });
 
-  // Elements to observe
-  const revealSelectors = [
-    '.reveal',
-    '.reveal-card',
-    '.slide-left',
-    '.slide-right',
-    '.reveal-section'
-  ];
-
-  revealSelectors.forEach(function (selector) {
-    document.querySelectorAll(selector).forEach(function (el) {
-      revealObserver.observe(el);
+  /* ── FAQ accordion ── */
+  document.querySelectorAll('.faq-question').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.parentElement;
+      var wasOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item.open').forEach(function (i) {
+        i.classList.remove('open');
+      });
+      // Open clicked if it was closed
+      if (!wasOpen) { item.classList.add('open'); }
     });
   });
 
-  /* ----------------------------------------------------------
-     STAGGERED CARD DELAYS (how-it-works section)
-     Additional JS-driven delay variation for smoothness
-  ---------------------------------------------------------- */
-  document.querySelectorAll('.reveal-card').forEach(function (card, index) {
-    if (!card.dataset.delay) {
-      card.dataset.delay = (index * 150).toString();
-    }
+  /* ── Smooth anchor scroll ── */
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = this.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      var navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 72;
+      var top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
   });
+
+  /* ── Newsletter ── */
+  window.handleNewsletter = function (e) {
+    e.preventDefault();
+    var btn = e.target.querySelector('.newsletter-btn');
+    var input = e.target.querySelector('.newsletter-input');
+    if (!input.value || !input.value.includes('@')) {
+      input.focus();
+      return;
+    }
+    btn.textContent = 'Subscribed \u2713';
+    btn.style.background = '#16a34a';
+    btn.disabled = true;
+    input.disabled = true;
+  };
+
+  /* ── iOS coming-soon toast ── */
+  window.showIosComingSoon = function () {
+    var toast = document.getElementById('ios-toast');
+    if (!toast) return;
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    clearTimeout(toast._hideTimer);
+    toast._hideTimer = setTimeout(function () {
+      toast.style.transition = 'opacity 0.4s';
+      toast.style.opacity = '0';
+      setTimeout(function () { toast.style.display = 'none'; toast.style.transition = ''; }, 420);
+    }, 3500);
+  };
+
 
   /* ----------------------------------------------------------
      CONFIRMATION PAGE
      Supports three flows (tried in priority order):
-       1. token_hash  – Direct link from updated Supabase email
+       1. token_hash  ΓÇô Direct link from updated Supabase email
                         template using {{ .TokenHash }}. Calls
-                        verifyOtp() – no PKCE, no allowlist needed.
-       2. code        – PKCE code (when redirect URL is allowlisted).
+                        verifyOtp() ΓÇô no PKCE, no allowlist needed.
+       2. code        ΓÇô PKCE code (when redirect URL is allowlisted).
                         Calls exchangeCodeForSession().
-       3. access_token in hash – Implicit/legacy flow fallback.
+       3. access_token in hash ΓÇô Implicit/legacy flow fallback.
   ---------------------------------------------------------- */
   const usernameEl  = document.getElementById('display-username');
   const emailEl     = document.getElementById('display-email');
@@ -147,7 +181,7 @@
       if (successEl)  successEl.style.display  = 'block';
       if (iconWrapEl) iconWrapEl.style.display = 'flex';
       var name = sanitise(username) || 'User';
-      var mail = sanitise(email)    || '—';
+      var mail = sanitise(email)    || 'ΓÇö';
       usernameEl.textContent = name;
       emailEl.textContent    = mail;
       if (welcomeEl) welcomeEl.textContent = 'Welcome, ' + name + '! \uD83C\uDF89';
@@ -192,19 +226,19 @@
     var code      = params.get('code');
 
     if (!window.supabase) {
-      // SDK CDN not yet loaded — wait briefly then retry
+      // SDK CDN not yet loaded ΓÇö wait briefly then retry
       setTimeout(function () { window.location.reload(); }, 2000);
     } else if (tokenHash) {
-      /* ── Flow 1: token_hash (preferred – set in Supabase email template) ── */
+      /* ΓöÇΓöÇ Flow 1: token_hash (preferred ΓÇô set in Supabase email template) ΓöÇΓöÇ */
       getSupabaseClient().auth.verifyOtp({ token_hash: tokenHash, type: type })
         .then(function (result) {
           if (result.error) {
             showError('Verification failed: ' + result.error.message +
-              '. The link may have expired — please sign up again.');
+              '. The link may have expired ΓÇö please sign up again.');
           } else {
             var user = extractUser(result);
             if (user) {
-              var email    = user.email || '—';
+              var email    = user.email || 'ΓÇö';
               var username = (user.user_metadata && user.user_metadata.username)
                              || email.split('@')[0];
               showSuccess(username, email);
@@ -218,17 +252,17 @@
         });
 
     } else if (code) {
-      /* ── Flow 2: PKCE code (when confirm.html is in Supabase redirect allowlist) ── */
+      /* ΓöÇΓöÇ Flow 2: PKCE code (when confirm.html is in Supabase redirect allowlist) ΓöÇΓöÇ */
       getSupabaseClient().auth.exchangeCodeForSession(code)
         .then(function (result) {
           if (result.error) {
             // PKCE verifier mismatch is common when exchange is from a different
-            // client — fall through to soft success since email is confirmed.
+            // client ΓÇö fall through to soft success since email is confirmed.
             showSoftSuccess();
           } else {
             var user = extractUser(result);
             if (user) {
-              var email    = user.email || '—';
+              var email    = user.email || 'ΓÇö';
               var username = (user.user_metadata && user.user_metadata.username)
                              || email.split('@')[0];
               showSuccess(username, email);
@@ -240,17 +274,17 @@
         .catch(function () { showSoftSuccess(); });
 
     } else {
-      /* ── Flow 3: implicit – access_token in hash ── */
+      /* ΓöÇΓöÇ Flow 3: implicit ΓÇô access_token in hash ΓöÇΓöÇ */
       var hashParams  = new URLSearchParams(window.location.hash.replace(/^#/, ''));
       var accessToken = hashParams.get('access_token');
       if (accessToken) {
         var payload  = decodeJwtPayload(accessToken);
-        var email    = (payload && payload.email) || '—';
+        var email    = (payload && payload.email) || 'ΓÇö';
         var username = (payload && payload.user_metadata && payload.user_metadata.username)
-                       || (email !== '—' ? email.split('@')[0] : 'User');
+                       || (email !== 'ΓÇö' ? email.split('@')[0] : 'User');
         showSuccess(username, email);
       } else {
-        // No auth params at all — show soft success so user can open the app
+        // No auth params at all ΓÇö show soft success so user can open the app
         showSoftSuccess();
       }
     }
@@ -274,25 +308,5 @@
       if (fallbackEl) { fallbackEl.style.display = 'block'; }
     }, 2000);
   };
-
-  /* ----------------------------------------------------------
-     SMOOTH ANCHOR SCROLL (augment native behavior on older
-     browsers and account for fixed navbar height)
-  ---------------------------------------------------------- */
-  document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-    anchor.addEventListener('click', function (e) {
-      const id = this.getAttribute('href').slice(1);
-      if (!id) return;
-      const target = document.getElementById(id);
-      if (!target) return;
-      e.preventDefault();
-      const navH = parseInt(
-        getComputedStyle(document.documentElement).getPropertyValue('--nav-h'),
-        10
-      ) || 72;
-      const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
-      window.scrollTo({ top: top, behavior: 'smooth' });
-    });
-  });
 
 })();
