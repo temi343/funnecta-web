@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Funnecta – Video Editor Preview</title>
+<style>
+  :root {
+    --brand: #D4841E;
+    --brand-dim: rgba(212,132,30,0.15);
+    --brand-mid: rgba(212,132,30,0.35);
+    --bg: #111111;
+    --bg2: #1a1a1a;
+    --bg3: #222222;
+    --surface: #1c1c1e;
+    --border: rgba(255,255,255,0.08);
+    --text1: #ffffff;
+    --text2: rgba(255,255,255,0.65);
+    --text3: rgba(255,255,255,0.35);
+    --red: #EF4444;
+    --radius: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 32px 16px;
+    color: var(--text1);
+  }
+
+  h1 { font-size: 14px; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 24px; }
+
+  /* ── Phone shell ── */
+  .phone {
+    width: 375px;
+    height: 812px;
+    background: var(--bg);
+    border-radius: 44px;
+    border: 1.5px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ── Status bar ── */
+  .status-bar {
+    height: 44px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+  .status-bar .time { font-size: 15px; font-weight: 600; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons span { font-size: 12px; color: var(--text1); }
+
+  /* ── Top bar ── */
+  .topbar {
+    height: 52px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .topbar .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: var(--bg3);
+    color: var(--text1);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px;
+  }
+  .topbar .actions { display: flex; gap: 8px; align-items: center; }
+  .topbar .undo-redo { display: flex; gap: 4px; }
+  .topbar .save-btn {
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Video preview area ── */
+  .video-preview {
+    flex: 1;
+    background: #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .video-preview .video-bg {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; inset: 0;
+  }
+  .video-preview .play-btn {
+    width: 56px; height: 56px;
+    background: rgba(0,0,0,0.55);
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 22px;
+    transition: transform 0.15s;
+    position: relative; z-index: 1;
+  }
+  .video-preview .play-btn:hover { transform: scale(1.08); }
+  .video-preview .timestamp {
+    position: absolute;
+    bottom: 10px; right: 12px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 6px;
+    padding: 3px 7px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  /* Caption overlay on video */
+  .video-preview .caption-overlay {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* ── Timeline section ── */
+  .timeline-section {
+    background: var(--bg);
+    padding: 10px 12px 8px;
+    flex-shrink: 0;
+  }
+  /* Timeline ruler */
+  .timeline-ruler {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4px;
+    margin-bottom: 5px;
+  }
+  .timeline-ruler span { font-size: 9px; color: var(--text3); }
+
+  /* Clip strip */
+  .clip-strip-wrap {
+    position: relative;
+    height: 52px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .clip-strip {
+    display: flex;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--brand);
+  }
+  .clip-frame {
+    flex: 1;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; color: rgba(255,255,255,0.3);
+  }
+  .clip-frame:last-child { border-right: none; }
+  /* Trim handles */
+  .trim-handle {
+    position: absolute;
+    top: 0; bottom: 0; width: 12px;
+    background: var(--brand);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: col-resize;
+    z-index: 2;
+  }
+  .trim-handle.left { left: 0; border-radius: 8px 2px 2px 8px; }
+  .trim-handle.right { right: 0; border-radius: 2px 8px 8px 2px; }
+  .trim-handle::after { content: '⋮'; color: rgba(255,255,255,0.9); font-size: 14px; }
+  /* Playhead */
+  .playhead {
+    position: absolute;
+    top: -4px; bottom: -4px;
+    left: 38%;
+    width: 2px;
+    background: #fff;
+    z-index: 3;
+    border-radius: 1px;
+  }
+  .playhead::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #fff;
+  }
+
+  /* Caption track */
+  .caption-track {
+    position: relative;
+    height: 24px;
+    background: var(--bg3);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    overflow: hidden;
+  }
+  .caption-block {
+    position: absolute;
+    top: 3px; height: 18px;
+    background: rgba(212,132,30,0.3);
+    border: 1px solid var(--brand);
+    border-radius: 3px;
+    display: flex; align-items: center;
+    padding: 0 5px;
+    font-size: 9px; font-weight: 600; color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Audio waveform track */
+  .waveform-track {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 22px;
+  }
+  .wave-label {
+    background: rgba(212,132,30,0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: flex; align-items: center; gap: 3px;
+    font-size: 9px; font-weight: 700;
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+  .wave-bars {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1.5px;
+    height: 100%;
+  }
+  .wave-bar {
+    width: 2px;
+    background: rgba(212,132,30,0.45);
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── Panel container ── */
+  .panel-section {
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+
+  /* ── Filter Panel ── */
+  .filter-panel {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.4);
+    padding: 0 0 8px;
+  }
+  .drag-handle {
+    width: 40px; height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+    margin: 10px auto 8px;
+  }
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px 8px;
+  }
+  .panel-title { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; color: var(--text2); }
+  .reset-chip {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.07);
+    border: 0.5px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px; color: var(--text2); cursor: pointer;
+  }
+  .filter-list {
+    display: flex;
+    gap: 8px;
+    padding: 0 12px 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-list::-webkit-scrollbar { display: none; }
+  .filter-item {
+    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    cursor: pointer;
+  }
+  .filter-thumb {
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .filter-thumb.active { border-color: var(--brand); }
+  .filter-thumb-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* Filter color overlays */
+  .f-normal .filter-thumb-inner { filter: none; }
+  .f-warm .filter-thumb-inner { filter: saturate(1.4) sepia(0.3) brightness(1.05); }
+  .f-cool .filter-thumb-inner { filter: saturate(0.8) hue-rotate(20deg) brightness(1.1); }
+  .f-bw .filter-thumb-inner { filter: grayscale(1) contrast(1.1); }
+  .f-vintage .filter-thumb-inner { filter: sepia(0.5) saturate(0.8) brightness(0.9); }
+  .f-vivid .filter-thumb-inner { filter: saturate(1.8) contrast(1.1); }
+  .f-fade .filter-thumb-inner { filter: saturate(0.6) brightness(1.15) contrast(0.85); }
+  .f-dramatic .filter-thumb-inner { filter: contrast(1.5) brightness(0.85) saturate(1.3); }
+  .filter-name { font-size: 10px; color: var(--text2); }
+  .filter-item.active .filter-name { color: var(--brand); font-weight: 700; }
+
+  .panel-divider { height: 0.5px; background: rgba(255,255,255,0.08); margin: 2px 0 8px; }
+
+  /* Sliders */
+  .slider-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 16px;
+  }
+  .slider-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+    color: var(--text2);
+  }
+  .slider-icon.active { background: var(--brand-dim); color: var(--brand); }
+  .slider-label { font-size: 11px; color: var(--text2); width: 72px; flex-shrink: 0; }
+  .slider-track {
+    flex: 1; height: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    position: relative;
+  }
+  .slider-fill {
+    position: absolute; top: 0; bottom: 0; left: 0;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+  .slider-thumb {
+    position: absolute; top: 50%;
+    transform: translate(-50%,-50%);
+    width: 14px; height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .slider-val { font-size: 10px; color: var(--text3); width: 28px; text-align: right; flex-shrink: 0; }
+
+  /* ── Audio Panel ── */
+  .audio-panel {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.4);
+    padding: 0 16px 12px;
+  }
+  .waveform-viz {
+    height: 56px;
+    background: var(--bg3);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 2px;
+    padding: 0 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .viz-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(212,132,30,0.5);
+    flex-shrink: 0;
+  }
+  .vol-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .mute-btn {
+    width: 32px; height: 32px;
+    background: var(--bg3);
+    border-radius: 10px;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; cursor: pointer; color: var(--text1);
+    flex-shrink: 0;
+  }
+  .mute-chips { display: flex; gap: 8px; margin-top: 4px; }
+  .mute-chip {
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid transparent;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mute-chip.active {
+    background: rgba(239,68,68,0.12);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .mute-chip.inactive { background: var(--bg3); border-color: rgba(255,255,255,0.1); color: var(--text2); }
+
+  /* ── Adjustments Panel ── */
+  .adj-panel {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.4);
+    padding: 0 0 10px;
+  }
+
+  /* ── Crop Panel ── */
+  .crop-panel {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.4);
+    padding: 0 0 10px;
+  }
+  .ratio-list {
+    display: flex;
+    gap: 6px;
+    padding: 0 12px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .ratio-list::-webkit-scrollbar { display: none; }
+  .ratio-chip {
+    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 8px 10px;
+    background: var(--bg3);
+    border: 1.5px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 56px;
+  }
+  .ratio-chip.active { border-color: var(--brand); background: var(--brand-dim); }
+  .ratio-preview {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ratio-box {
+    border: 1.5px solid var(--text3);
+    border-radius: 2px;
+  }
+  .ratio-chip.active .ratio-box { border-color: var(--brand); }
+  .ratio-label { font-size: 10px; color: var(--text2); font-weight: 600; }
+  .ratio-chip.active .ratio-label { color: var(--brand); }
+  .grid-toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 16px;
+    border-top: 0.5px solid rgba(255,255,255,0.06);
+    margin-top: 4px;
+  }
+  .grid-label { font-size: 12px; color: var(--text2); }
+  .toggle-track {
+    width: 44px; height: 26px;
+    border-radius: 13px;
+    background: var(--bg3);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .toggle-track.on { background: var(--brand); border-color: var(--brand); }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: transform 0.25s;
+  }
+  .toggle-track.on .toggle-thumb { transform: translateX(18px); }
+
+  /* ── Bottom toolbar ── */
+  .toolbar {
+    height: 72px;
+    background: var(--bg);
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 6px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  .toolbar::-webkit-scrollbar { display: none; }
+  .tool-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px;
+    min-width: 64px;
+    padding: 6px 0;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .tool-item:hover { background: rgba(255,255,255,0.04); }
+  .tool-item.active { background: var(--brand-dim); }
+  .tool-icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    transition: color 0.15s;
+  }
+  .tool-item .tool-icon { color: var(--text2); }
+  .tool-item.active .tool-icon { color: var(--brand); }
+  .tool-item.delete .tool-icon { color: rgba(239,68,68,0.6); }
+  .tool-item.delete.active .tool-icon { color: var(--red); }
+  .tool-label {
+    font-size: 10px;
+    color: var(--text3);
+    font-weight: 500;
+  }
+  .tool-item.active .tool-label { color: var(--brand); font-weight: 700; }
+  .tool-item.delete .tool-label { color: rgba(239,68,68,0.5); }
+  .tool-item.delete.active .tool-label { color: var(--red); font-weight: 700; }
+
+  /* ── Tab switcher ── */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 24px 0 12px;
+  }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.6);
+    transition: all 0.2s;
+  }
+  .tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  .note { font-size: 11px; color: rgba(255,255,255,0.3); text-align: center; margin-bottom: 20px; letter-spacing: 0.3px; }
+</style>
+</head>
+<body>
+
+<h1>Funnecta Video Editor Preview</h1>
+
+<!-- Tab switcher -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('filter')">Filter</div>
+  <div class="tab" onclick="showTab('audio')">Audio</div>
+  <div class="tab" onclick="showTab('adjust')">Adjust</div>
+  <div class="tab" onclick="showTab('crop')">Crop</div>
+  <div class="tab" onclick="showTab('caption')">Caption</div>
+  <div class="tab" onclick="showTab('none')">No Panel</div>
+</div>
+<p class="note">Click tabs above to switch active tool panel &nbsp;·&nbsp; Sliders are interactive</p>
+
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span>●●●●</span>
+      <span>WiFi</span>
+      <span>🔋</span>
+    </div>
+  </div>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="icon-btn">✕</button>
+    <div class="actions">
+      <div class="undo-redo">
+        <button class="icon-btn" title="Undo">↩</button>
+        <button class="icon-btn" title="Redo">↪</button>
+      </div>
+      <button class="save-btn">Export</button>
+    </div>
+  </div>
+
+  <!-- Video preview -->
+  <div class="video-preview">
+    <div class="video-bg"></div>
+    <div class="play-btn" id="playBtn" onclick="togglePlay()">▶</div>
+    <div class="caption-overlay" id="captionOverlay" style="display:none">✨ Funnecta moment</div>
+    <div class="timestamp">0:04 / 0:18</div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-section">
+    <!-- Ruler -->
+    <div class="timeline-ruler">
+      <span>0:00</span><span>0:05</span><span>0:10</span><span>0:15</span><span>0:18</span>
+    </div>
+
+    <!-- Clip strip -->
+    <div class="clip-strip-wrap">
+      <div class="clip-strip">
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+        <div class="clip-frame">▣</div>
+      </div>
+      <div class="trim-handle left"></div>
+      <div class="trim-handle right"></div>
+      <div class="playhead"></div>
+    </div>
+
+    <!-- Caption track -->
+    <div class="caption-track" id="captionTrack">
+      <div class="caption-block" style="left:5%;width:28%">✨ Funnecta moment</div>
+      <div class="caption-block" style="left:55%;width:32%">Amazing! 🔥</div>
+    </div>
+
+    <!-- Audio waveform track -->
+    <div class="waveform-track" id="waveformTrack">
+      <div class="wave-label" id="waveLabel">
+        <span>♪</span> Audio
+      </div>
+      <div class="wave-bars" id="waveBars"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANELS ═══════════════ -->
+
+  <!-- Filter Panel -->
+  <div class="panel-section" id="panel-filter">
+    <div class="filter-panel">
+      <div class="drag-handle"></div>
+      <div class="panel-header">
+        <span class="panel-title">FILTERS</span>
+        <div class="reset-chip">↺ Reset</div>
+      </div>
+
+      <div class="filter-list">
+        <div class="filter-item" onclick="selectFilter(0)">
+          <div class="filter-thumb f-normal" id="ft0">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn0">Normal</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(1)">
+          <div class="filter-thumb f-warm" id="ft1">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn1">Warm</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(2)">
+          <div class="filter-thumb f-cool" id="ft2">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn2">Cool</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(3)">
+          <div class="filter-thumb f-bw" id="ft3">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn3">B&amp;W</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(4)">
+          <div class="filter-thumb f-vintage" id="ft4">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn4">Vintage</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(5)">
+          <div class="filter-thumb f-vivid" id="ft5">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn5">Vivid</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(6)">
+          <div class="filter-thumb f-fade" id="ft6">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn6">Fade</span>
+        </div>
+        <div class="filter-item" onclick="selectFilter(7)">
+          <div class="filter-thumb f-dramatic" id="ft7">
+            <div class="filter-thumb-inner">🎬</div>
+          </div>
+          <span class="filter-name" id="fn7">Dramatic</span>
+        </div>
+      </div>
+
+      <div class="panel-divider"></div>
+
+      <!-- Intensity slider (only when filter != Normal) -->
+      <div id="intensityRow" style="display:none">
+        <div class="slider-row">
+          <div class="slider-icon active">✦</div>
+          <span class="slider-label">Intensity</span>
+          <div class="slider-track">
+            <div class="slider-fill" id="intensityFill" style="width:80%"></div>
+            <div class="slider-thumb" id="intensityThumb" style="left:80%"></div>
+          </div>
+          <span class="slider-val" id="intensityVal">80%</span>
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-icon">☀</div>
+        <span class="slider-label">Brightness</span>
+        <div class="slider-track" id="bTrack">
+          <div class="slider-fill" id="bFill" style="width:50%"></div>
+          <div class="slider-thumb" id="bThumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val" id="bVal">0</span>
+      </div>
+      <div class="slider-row">
+        <div class="slider-icon">◑</div>
+        <span class="slider-label">Contrast</span>
+        <div class="slider-track">
+          <div class="slider-fill" id="cFill" style="width:50%"></div>
+          <div class="slider-thumb" id="cThumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val" id="cVal">0</span>
+      </div>
+      <div class="slider-row">
+        <div class="slider-icon">🎨</div>
+        <span class="slider-label">Saturation</span>
+        <div class="slider-track">
+          <div class="slider-fill" id="sFill" style="width:50%"></div>
+          <div class="slider-thumb" id="sThumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val" id="sVal">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Panel -->
+  <div class="panel-section" id="panel-audio" style="display:none">
+    <div class="audio-panel">
+      <div class="drag-handle"></div>
+      <div class="panel-header">
+        <span class="panel-title">AUDIO</span>
+        <div class="reset-chip">↺ Reset</div>
+      </div>
+
+      <!-- Big waveform viz -->
+      <div class="waveform-viz" id="audioWaveViz"></div>
+
+      <!-- Volume row -->
+      <div class="vol-row">
+        <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+        <div class="slider-track" style="flex:1">
+          <div class="slider-fill" id="volFill" style="width:75%"></div>
+          <div class="slider-thumb" id="volThumb" style="left:75%"></div>
+        </div>
+        <span class="slider-val">75%</span>
+      </div>
+
+      <!-- Mute chip -->
+      <div class="mute-chips">
+        <div class="mute-chip inactive" id="muteChip" onclick="toggleMute()">
+          🔇 Mute Audio
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Adjustments Panel -->
+  <div class="panel-section" id="panel-adjust" style="display:none">
+    <div class="adj-panel">
+      <div class="drag-handle"></div>
+      <div class="panel-header">
+        <span class="panel-title">ADJUSTMENTS</span>
+        <div class="reset-chip">↺ Reset All</div>
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-icon active">☀</div>
+        <span class="slider-label">Brightness</span>
+        <div class="slider-track">
+          <div class="slider-fill" id="ab-fill" style="width:50%"></div>
+          <div class="slider-thumb" id="ab-thumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val">0</span>
+      </div>
+      <div class="slider-row">
+        <div class="slider-icon">◑</div>
+        <span class="slider-label">Contrast</span>
+        <div class="slider-track">
+          <div class="slider-fill" id="ac-fill" style="width:50%"></div>
+          <div class="slider-thumb" id="ac-thumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val">0</span>
+      </div>
+      <div class="slider-row">
+        <div class="slider-icon">🎨</div>
+        <span class="slider-label">Saturation</span>
+        <div class="slider-track">
+          <div class="slider-fill" id="as-fill" style="width:50%"></div>
+          <div class="slider-thumb" id="as-thumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val">0</span>
+      </div>
+      <div class="slider-row">
+        <div class="slider-icon">◈</div>
+        <span class="slider-label">Sharpness</span>
+        <div class="slider-track">
+          <div class="slider-fill" id="ash-fill" style="width:50%"></div>
+          <div class="slider-thumb" id="ash-thumb" style="left:50%"></div>
+        </div>
+        <span class="slider-val">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crop Panel -->
+  <div class="panel-section" id="panel-crop" style="display:none">
+    <div class="crop-panel">
+      <div class="drag-handle"></div>
+      <div class="panel-header">
+        <span class="panel-title">CROP</span>
+        <div class="reset-chip">↺ Reset</div>
+      </div>
+
+      <div class="ratio-list">
+        <div class="ratio-chip active" onclick="selectRatio(this,'Free')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:22px;height:22px;"></div></div>
+          <span class="ratio-label">Free</span>
+        </div>
+        <div class="ratio-chip" onclick="selectRatio(this,'1:1')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:20px;height:20px;"></div></div>
+          <span class="ratio-label">1:1</span>
+        </div>
+        <div class="ratio-chip" onclick="selectRatio(this,'4:3')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:24px;height:18px;"></div></div>
+          <span class="ratio-label">4:3</span>
+        </div>
+        <div class="ratio-chip" onclick="selectRatio(this,'3:4')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:18px;height:24px;"></div></div>
+          <span class="ratio-label">3:4</span>
+        </div>
+        <div class="ratio-chip" onclick="selectRatio(this,'16:9')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:28px;height:16px;"></div></div>
+          <span class="ratio-label">16:9</span>
+        </div>
+        <div class="ratio-chip" onclick="selectRatio(this,'9:16')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:14px;height:25px;"></div></div>
+          <span class="ratio-label">9:16</span>
+        </div>
+        <div class="ratio-chip" onclick="selectRatio(this,'21:9')">
+          <div class="ratio-preview"><div class="ratio-box" style="width:30px;height:13px;"></div></div>
+          <span class="ratio-label">21:9</span>
+        </div>
+      </div>
+
+      <div class="grid-toggle-row">
+        <span class="grid-label">Grid Overlay</span>
+        <div class="toggle-track" id="gridToggle" onclick="toggleGrid()">
+          <div class="toggle-thumb"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Caption panel (inline) -->
+  <div class="panel-section" id="panel-caption" style="display:none">
+    <div style="background:var(--bg2);padding:10px 16px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="color:var(--brand);font-size:16px">💬</span>
+        <span style="font-size:13px;color:var(--text2)">2 caption(s)</span>
+        <div style="flex:1"></div>
+        <button style="background:none;border:none;color:var(--brand);font-size:13px;font-weight:700;cursor:pointer">+ Add</button>
+      </div>
+      <div style="display:flex;gap:8px;overflow-x:auto">
+        <div style="flex-shrink:0;padding:7px 12px;background:var(--brand-dim);border:1px solid var(--brand-mid);border-radius:8px">
+          <div style="font-size:12px;color:var(--text1);font-weight:500">✨ Funnecta moment</div>
+          <div style="font-size:10px;color:var(--text3)">0:01 – 0:06</div>
+        </div>
+        <div style="flex-shrink:0;padding:7px 12px;background:var(--brand-dim);border:1px solid var(--brand-mid);border-radius:8px">
+          <div style="font-size:12px;color:var(--text1);font-weight:500">Amazing! 🔥</div>
+          <div style="font-size:10px;color:var(--text3)">0:10 – 0:15</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom toolbar (always visible) -->
+  <div class="toolbar" id="mainToolbar">
+    <div class="tool-item" id="tool-filter" onclick="setActiveTool('filter')">
+      <div class="tool-icon">✦</div>
+      <span class="tool-label">Filter</span>
+    </div>
+    <div class="tool-item" id="tool-trim" onclick="setActiveTool('trim')">
+      <div class="tool-icon">✂</div>
+      <span class="tool-label">Trim/Cut</span>
+    </div>
+    <div class="tool-item" id="tool-audio" onclick="setActiveTool('audio')">
+      <div class="tool-icon">♪</div>
+      <span class="tool-label">Audio</span>
+    </div>
+    <div class="tool-item" id="tool-adjust" onclick="setActiveTool('adjust')">
+      <div class="tool-icon">⚙</div>
+      <span class="tool-label">Adjust</span>
+    </div>
+    <div class="tool-item" id="tool-crop" onclick="setActiveTool('crop')">
+      <div class="tool-icon">⬚</div>
+      <span class="tool-label">Crop</span>
+    </div>
+    <div class="tool-item" id="tool-caption" onclick="setActiveTool('caption')">
+      <div class="tool-icon">💬</div>
+      <span class="tool-label">Caption</span>
+    </div>
+    <div class="tool-item" id="tool-duplicate" onclick="setActiveTool('duplicate')">
+      <div class="tool-icon">⧉</div>
+      <span class="tool-label">Duplicate</span>
+    </div>
+    <div class="tool-item delete" id="tool-delete" onclick="setActiveTool('delete')">
+      <div class="tool-icon">🗑</div>
+      <span class="tool-label">Delete</span>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+// ─── Waveform generation ───
+function generateWave(containerId, count, color, muteAlpha) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '';
+  const rng = (seed) => {
+    let s = seed;
+    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  };
+  const r = rng(7);
+  for (let i = 0; i < count; i++) {
+    const base = Math.abs(Math.sin(i * 0.35 + 0.6));
+    const h = Math.max(2, (base * (0.3 + r() * 0.7)) * (c.clientHeight || 56));
+    const bar = document.createElement('div');
+    bar.className = 'viz-bar';
+    bar.style.height = h + 'px';
+    bar.style.background = color;
+    c.appendChild(bar);
+  }
+}
+
+function generateWaveBars() {
+  const c = document.getElementById('waveBars');
+  if (!c) return;
+  c.innerHTML = '';
+  const rng = (seed) => {
+    let s = seed;
+    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  };
+  const r = rng(42);
+  for (let i = 0; i < 60; i++) {
+    const base = Math.abs(Math.sin(i * 0.35 + 0.6));
+    const h = Math.max(2, (base * (0.3 + r() * 0.7)) * 18);
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    bar.style.height = h + 'px';
+    c.appendChild(bar);
+  }
+}
+
+// ─── Tab / panel switching ───
+const allPanels = ['filter','audio','adjust','crop','caption'];
+let currentTool = 'filter';
+
+function showTab(tool) {
+  currentTool = tool;
+  // Update tabs
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  // Show correct panel
+  allPanels.forEach(p => {
+    const el = document.getElementById('panel-' + p);
+    if (el) el.style.display = (p === tool) ? 'block' : 'none';
+  });
+  // Sync toolbar highlight
+  updateToolbarHighlight(tool === 'none' ? null : tool);
+  // Show caption overlay
+  document.getElementById('captionOverlay').style.display = tool === 'caption' ? 'block' : 'none';
+}
+
+function setActiveTool(tool) {
+  // Toggle
+  if (currentTool === tool) {
+    currentTool = 'none';
+    allPanels.forEach(p => {
+      const el = document.getElementById('panel-' + p);
+      if (el) el.style.display = 'none';
+    });
+    updateToolbarHighlight(null);
+    return;
+  }
+  currentTool = tool;
+  allPanels.forEach(p => {
+    const el = document.getElementById('panel-' + p);
+    if (el) el.style.display = (p === tool) ? 'block' : 'none';
+  });
+  updateToolbarHighlight(tool);
+  // Update header tabs
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.textContent.toLowerCase().includes(tool));
+  });
+  // Caption overlay
+  document.getElementById('captionOverlay').style.display = tool === 'caption' ? 'block' : 'none';
+}
+
+function updateToolbarHighlight(tool) {
+  const tools = ['filter','trim','audio','adjust','crop','caption','duplicate','delete'];
+  tools.forEach(t => {
+    const el = document.getElementById('tool-' + t);
+    if (el) el.classList.toggle('active', t === tool);
+  });
+}
+
+// ─── Filter selection ───
+let activeFilter = 0;
+function selectFilter(idx) {
+  for (let i = 0; i < 8; i++) {
+    document.getElementById('ft' + i).classList.toggle('active', i === idx);
+    document.getElementById('fn' + i).parentElement.classList.toggle('active', i === idx);
+  }
+  activeFilter = idx;
+  document.getElementById('intensityRow').style.display = idx !== 0 ? 'block' : 'none';
+}
+// Init: Normal active
+document.getElementById('ft0').classList.add('active');
+
+// ─── Play toggle ───
+let playing = false;
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('playBtn').textContent = playing ? '⏸' : '▶';
+}
+
+// ─── Mute toggle ───
+let muted = false;
+function toggleMute() {
+  muted = !muted;
+  document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
+  document.getElementById('muteChip').className = 'mute-chip ' + (muted ? 'active' : 'inactive');
+  // Update waveform track
+  const label = document.getElementById('waveLabel');
+  label.style.background = muted ? 'rgba(239,68,68,0.12)' : 'rgba(212,132,30,0.1)';
+  label.style.color = muted ? '#EF4444' : '#D4841E';
+  document.querySelectorAll('#waveBars .wave-bar').forEach(b => {
+    b.style.background = muted ? 'rgba(255,255,255,0.08)' : 'rgba(212,132,30,0.45)';
+  });
+}
+
+// ─── Crop ratio ───
+function selectRatio(el, name) {
+  document.querySelectorAll('.ratio-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── Grid toggle ───
+let gridOn = false;
+function toggleGrid() {
+  gridOn = !gridOn;
+  document.getElementById('gridToggle').classList.toggle('on', gridOn);
+}
+
+// ─── Draggable sliders ───
+function makeSliderDraggable(trackId, fillId, thumbId, valId, min, max, isPercent) {
+  const track = document.getElementById(trackId);
+  const fill = document.getElementById(fillId);
+  const thumb = document.getElementById(thumbId);
+  const valEl = document.getElementById(valId);
+  if (!track) return;
+
+  let dragging = false;
+  const setVal = (x) => {
+    const rect = track.getBoundingClientRect();
+    let pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+    fill.style.width = (pct * 100) + '%';
+    thumb.style.left = (pct * 100) + '%';
+    if (valEl) {
+      const v = min + (max - min) * pct;
+      valEl.textContent = isPercent ? Math.round(pct * 100) + '%' : Math.round(v);
+    }
+  };
+
+  track.addEventListener('mousedown', e => { dragging = true; setVal(e.clientX); });
+  track.addEventListener('touchstart', e => { dragging = true; setVal(e.touches[0].clientX); }, {passive:true});
+  document.addEventListener('mousemove', e => { if (dragging) setVal(e.clientX); });
+  document.addEventListener('touchmove', e => { if (dragging) setVal(e.touches[0].clientX); }, {passive:true});
+  document.addEventListener('mouseup', () => dragging = false);
+  document.addEventListener('touchend', () => dragging = false);
+}
+
+// Wire up sliders
+window.addEventListener('load', () => {
+  // Filter panel
+  makeSliderDraggable('bTrack','bFill','bThumb','bVal', -100, 100, false);
+  makeSliderDraggable(null,'cFill','cThumb','cVal', -100, 100, false);
+  makeSliderDraggable(null,'sFill','sThumb','sVal', -100, 100, false);
+
+  // Generate waveforms
+  generateWave('audioWaveViz', 45, 'rgba(212,132,30,0.5)');
+  generateWaveBars();
+});
+
+// Slider for tracks without separate id
+function makeSliderFromTrack(fillEl, thumbEl, valEl, min, max) {
+  if (!fillEl) return;
+  const track = fillEl.parentElement;
+  let dragging = false;
+  const setVal = (x) => {
+    const rect = track.getBoundingClientRect();
+    let pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+    fillEl.style.width = (pct * 100) + '%';
+    thumbEl.style.left = (pct * 100) + '%';
+    const v = min + (max - min) * pct;
+    if (valEl) valEl.textContent = Math.round(v);
+  };
+  track.addEventListener('mousedown', e => { dragging = true; setVal(e.clientX); });
+  document.addEventListener('mousemove', e => { if (dragging) setVal(e.clientX); });
+  document.addEventListener('mouseup', () => dragging = false);
+}
+
+window.addEventListener('load', () => {
+  // Adj sliders
+  ['ab','ac','as','ash'].forEach(id => {
+    const fill = document.getElementById(id+'-fill');
+    const thumb = document.getElementById(id+'-thumb');
+    if (fill) makeSliderFromTrack(fill, thumb, null, -100, 100);
+  });
+  // Intensity
+  makeSliderFromTrack(
+    document.getElementById('intensityFill'),
+    document.getElementById('intensityThumb'),
+    document.getElementById('intensityVal'), 0, 100
+  );
+  // Volume
+  makeSliderFromTrack(
+    document.getElementById('volFill'),
+    document.getElementById('volThumb'),
+    null, 0, 100
+  );
+});
+
+// Init: show filter tab active
+updateToolbarHighlight('filter');
+</script>
+</body>
+</html>
